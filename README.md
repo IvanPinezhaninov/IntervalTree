@@ -1,5 +1,6 @@
 # IntervalTree
-[![Linux Build Status](https://travis-ci.org/IvanPinezhaninov/IntervalTree.svg?branch=master)](https://travis-ci.org/IvanPinezhaninov/intervaltree)
+
+[![Linux Build Status](https://travis-ci.org/IvanPinezhaninov/intervaltree.svg?branch=master)](https://travis-ci.org/IvanPinezhaninov/intervaltree)
 
 ## Overview
 
