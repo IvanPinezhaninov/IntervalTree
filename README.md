@@ -29,6 +29,7 @@ int main()
     auto overlapingIntervals = intervalTree.findOverlappingIntervals({ 50, 80 });
     auto innerIntervals = intervalTree.findInnerIntervals({ 50, 80 });
     auto outerIntervals = intervalTree.findOuterIntervals({ 50, 80 });
+    auto intervalsContainPoint = intervalTree.findIntervalsContainPoint(50);
 
     // Print all intervals
     std::cout << "All intervals:" << std::endl;
@@ -54,6 +55,13 @@ int main()
     // Print outer intervals
     std::cout << "Outer intervals:" << std::endl;
     for (auto interval : outerIntervals) {
+        std::cout << interval << std::endl;
+    }
+    std::cout << std::endl;
+    
+    // Print intervals contain the point
+    std::cout << "Intervals contain the point:" << std::endl;
+    for (auto interval : intervalsContainPoint) {
         std::cout << interval << std::endl;
     }
 
