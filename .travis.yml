@@ -1,0 +1,14 @@
+sudo: required
+dist: trusty
+language: cpp
+compiler: gcc
+install:
+  - sudo apt-get update -qq
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - cd test
+  - ./IntervalTreeTest
+

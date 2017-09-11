@@ -1,0 +1,100 @@
+#include "intervals.h"
+
+
+Interval Test::interval()
+{
+    return {400, 500};
+}
+
+
+IntervalVector Test::innerIntervals()
+{
+    return IntervalVector
+    {
+        { 410, 490 },
+        { 420, 480 },
+        { 420, 470 },
+        { 430, 470 },
+        { 440, 460 }
+    };
+}
+
+
+IntervalVector Test::outerIntervals()
+{
+    return IntervalVector
+    {
+        { 390, 510 },
+        { 380, 520 },
+        { 380, 530 },
+        { 370, 530 },
+        { 360, 540 }
+    };
+}
+
+
+IntervalVector Test::leftIntervals()
+{
+    return IntervalVector
+    {
+        { 290, 390 },
+        { 270, 380 },
+        { 270, 370 },
+        { 260, 370 },
+        { 250, 360 }
+    };
+}
+
+
+IntervalVector Test::rightIntervals()
+{
+    return IntervalVector
+    {
+        { 510, 610 },
+        { 520, 620 },
+        { 520, 630 },
+        { 530, 630 },
+        { 540, 640 }
+    };
+}
+
+
+IntervalVector Test::leftOverlappingIntervals()
+{
+    return IntervalVector
+    {
+        { 330, 430 },
+        { 320, 420 },
+        { 320, 410 },
+        { 310, 410 },
+        { 300, 400 }
+    };
+}
+
+
+IntervalVector Test::rightOverlappingIntervals()
+{
+    return IntervalVector
+    {
+        { 470, 570 },
+        { 480, 580 },
+        { 480, 590 },
+        { 490, 590 },
+        { 500, 600 }
+    };
+}
+
+
+IntervalVector Test::boundaryIntervals()
+{
+    return IntervalVector { interval() };
+}
+
+
+IntervalVector Test::compositeIntervals(const IntervalVector &a, const IntervalVector &b)
+{
+    IntervalVector composite = a;
+    composite.reserve(a.size() + b.size());
+    composite.insert(composite.end(), b.cbegin(), b.cend());
+    return composite;
+}
