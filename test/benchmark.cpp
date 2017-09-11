@@ -172,4 +172,37 @@ TEST_CASE("Benchmark")
 
         Timer::printTimeElapsed(start, SIZE, "Tree:   Find outer intervals");
     }
+
+
+    std::cout << std::endl;
+
+
+    // Vector: Find intervals contain point
+    {
+        const Timer::Time &start = Timer::now();
+
+        for (int i = 0; i < int(SIZE); ++i) {
+            IntervalVector foundIntervals;
+            foundIntervals.reserve(size_t(intervals.size() * Intervals::outVectorReserveRate));
+            for (const Interval &interval : intervals) {
+                if (interval.low <= i && i <= interval.high) {
+                    foundIntervals.push_back(interval);
+                }
+            }
+        }
+
+        Timer::printTimeElapsed(start, SIZE, "Vector: Find intervals contain point");
+    }
+
+
+    // Tree: Find intervals contain point
+    {
+        const Timer::Time &start = Timer::now();
+
+        for (int i = 0; i < int(SIZE); ++i) {
+            tree.findIntervalsContainPoint(i);
+        }
+
+        Timer::printTimeElapsed(start, SIZE, "Tree:   Find intervals contain point");
+    }
 }

@@ -23,9 +23,11 @@ set(SOURCES
     utils/random.cpp
     benchmark.cpp
     countinnerintervals.cpp
+    countintervalscontainpoint.cpp
     countouterintervals.cpp
     countoverlappingintervals.cpp
     findinnerintervals.cpp
+    findintervalscontainpoint.cpp
     findouterintervals.cpp
     findoverlappingintervals.cpp
     test.cpp

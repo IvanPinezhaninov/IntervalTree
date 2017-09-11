@@ -398,6 +398,30 @@ public:
     }
 
 
+    void findIntervalsContainPoint(const IntervalType &point, IntervalVector &out) const
+    {
+        if (!out.empty()) {
+            out.clear();
+        }
+
+        if (m_root != m_nill) {
+            subtreeIntervalsContainPoint(m_root, point, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
+            {
+                out.push_back(interval);
+            });
+        }
+    }
+
+
+    IntervalVector findIntervalsContainPoint(const IntervalType &point) const
+    {
+        IntervalVector out;
+        out.reserve(m_size * outVectorReserveRate);
+        findIntervalsContainPoint(point, out);
+        return out;
+    }
+
+
     size_t countOverlappingIntervals(const Interval<IntervalType, ValueType> &interval) const
     {
         size_t count = 0;
@@ -434,6 +458,21 @@ public:
 
         if (m_root != m_nill) {
             subtreeOuterIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
+            {
+                ++count;
+            });
+        }
+
+        return count;
+    }
+
+
+    size_t countIntervalsContainPoint(const IntervalType &point) const
+    {
+        size_t count = 0;
+
+        if (m_root != m_nill) {
+            subtreeIntervalsContainPoint(m_root, point, [&count] (const Interval<IntervalType, ValueType> &) -> void
             {
                 ++count;
             });
@@ -772,6 +811,37 @@ private:
                 && !(interval.low < node->left->minHigh)
                 && !(node->left->maxHigh < interval.high)) {
             subtreeOuterIntervals(node->left, interval, callback);
+        }
+    }
+
+
+    template<typename Callback>
+    void subtreeIntervalsContainPoint(Node *node, const IntervalType &point, Callback &&callback) const
+    {
+        assert(nullptr != node);
+
+        if (node == m_nill) {
+            return;
+        }
+
+        if (!(point < node->intervals.front().low)) {
+            if (!(node->high < point)) {
+                for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
+                    if (!(it->high < point)) {
+                        callback(*it);
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            if (node->right != m_nill && !(node->right->maxHigh < point)) {
+                subtreeIntervalsContainPoint(node->right, point, callback);
+            }
+        }
+
+        if (node->left != m_nill && !(node->left->maxHigh < point)) {
+            subtreeIntervalsContainPoint(node->left, point, callback);
         }
     }
 
