@@ -22,6 +22,9 @@ set(SOURCES
     utils/timer.cpp
     utils/random.cpp
     benchmark.cpp
+    countinnerintervals.cpp
+    countouterintervals.cpp
+    countoverlappingintervals.cpp
     findinnerintervals.cpp
     findouterintervals.cpp
     findoverlappingintervals.cpp

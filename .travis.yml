@@ -10,5 +10,5 @@ script:
   - cmake ..
   - make
   - cd test
-  - ./IntervalTreeTest
+  - ./IntervalTreeTest --rng-seed time
 

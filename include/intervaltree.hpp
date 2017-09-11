@@ -333,7 +333,10 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, out);
+            subtreeOverlappingIntervals(m_root, interval, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
+            {
+                out.push_back(interval);
+            });
         }
     }
 
@@ -354,7 +357,10 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, out);
+            subtreeInnerIntervals(m_root, interval, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
+            {
+                out.push_back(interval);
+            });
         }
     }
 
@@ -375,7 +381,10 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, out);
+            subtreeOuterIntervals(m_root, interval, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
+            {
+                out.push_back(interval);
+            });
         }
     }
 
@@ -386,6 +395,51 @@ public:
         out.reserve(m_size * outVectorReserveRate);
         findOuterIntervals(interval, out);
         return out;
+    }
+
+
+    size_t countOverlappingIntervals(const Interval<IntervalType, ValueType> &interval) const
+    {
+        size_t count = 0;
+
+        if (m_root != m_nill) {
+            subtreeOverlappingIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
+            {
+                ++count;
+            });
+        }
+
+        return count;
+    }
+
+
+    size_t countInnerIntervals(const Interval<IntervalType, ValueType> &interval) const
+    {
+        size_t count = 0;
+
+        if (m_root != m_nill) {
+            subtreeInnerIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
+            {
+                ++count;
+            });
+        }
+
+        return count;
+    }
+
+
+    size_t countOuterIntervals(const Interval<IntervalType, ValueType> &interval) const
+    {
+        size_t count = 0;
+
+        if (m_root != m_nill) {
+            subtreeOuterIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
+            {
+                ++count;
+            });
+        }
+
+        return count;
     }
 
 
@@ -629,7 +683,8 @@ private:
     }
 
 
-    void subtreeOverlappingIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, IntervalVector &out) const
+    template<typename Callback>
+    void subtreeOverlappingIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -640,7 +695,7 @@ private:
         if (!(interval.high < node->intervals.front().low) && !(node->high < interval.low)) {
             for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
                 if (!(it->high < interval.low)) {
-                    out.push_back(*it);
+                    callback(*it);
                 } else {
                     break;
                 }
@@ -650,16 +705,17 @@ private:
         if (node->right != m_nill
                 && !(node->right->maxHigh < interval.low)
                 && !(interval.high < node->right->minHigh)) {
-            subtreeOverlappingIntervals(node->right, interval, out);
+            subtreeOverlappingIntervals(node->right, interval, callback);
         }
 
         if (node->left != m_nill && !(node->left->maxHigh < interval.low)) {
-            subtreeOverlappingIntervals(node->left, interval, out);
+            subtreeOverlappingIntervals(node->left, interval, callback);
         }
     }
 
 
-    void subtreeInnerIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, IntervalVector &out) const
+    template<typename Callback>
+    void subtreeInnerIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -670,24 +726,25 @@ private:
         if (!(node->intervals.front().low < interval.low)) {
             for (auto it = node->intervals.begin(); it != node->intervals.end(); ++it) {
                 if (!(interval.high < it->high)) {
-                    out.push_back(*it);
+                    callback(*it);
                 } else {
                     break;
                 }
             }
 
             if (node->left != m_nill && !(node->left->maxHigh < interval.low)) {
-                subtreeInnerIntervals(node->left, interval, out);
+                subtreeInnerIntervals(node->left, interval, callback);
             }
         }
 
         if (node->right != m_nill && !(interval.high < node->right->minHigh)) {
-            subtreeInnerIntervals(node->right, interval, out);
+            subtreeInnerIntervals(node->right, interval, callback);
         }
     }
 
 
-    void subtreeOuterIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, IntervalVector &out) const
+    template<typename Callback>
+    void subtreeOuterIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -698,7 +755,7 @@ private:
         if (!(interval.low < node->intervals.front().low)) {
             for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
                 if (!(it->high < interval.high)) {
-                    out.push_back(*it);
+                    callback(*it);
                 } else {
                     break;
                 }
@@ -707,14 +764,14 @@ private:
             if (node->right != m_nill
                     && !(interval.low < node->right->minHigh)
                     && !(node->right->maxHigh < interval.high)) {
-                subtreeOuterIntervals(node->right, interval, out);
+                subtreeOuterIntervals(node->right, interval, callback);
             }
         }
 
         if (node->left != m_nill
                 && !(interval.low < node->left->minHigh)
                 && !(node->left->maxHigh < interval.high)) {
-            subtreeOuterIntervals(node->left, interval, out);
+            subtreeOuterIntervals(node->left, interval, callback);
         }
     }
 

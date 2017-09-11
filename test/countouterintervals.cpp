@@ -2,16 +2,16 @@
 #include "intervals.h"
 
 
-TEST_CASE("Find outer intervals")
+TEST_CASE("Count outer intervals")
 {
     SECTION("Empty tree")
     {
         IntervalTree tree;
         REQUIRE(tree.isEmpty());
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE(result.empty());
+        REQUIRE(0 == count);
     }
 
     SECTION("Boundary interval")
@@ -22,10 +22,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+        REQUIRE(count == Test::boundaryIntervals().size());
     }
 
     SECTION("Outer intervals")
@@ -36,10 +35,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+        REQUIRE(count == Test::outerIntervals().size());
     }
 
     SECTION("Outer and boundary intervals")
@@ -52,10 +50,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
+        REQUIRE(count == intervals.size());
     }
 
     SECTION("Inner intervals")
@@ -66,9 +63,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE(result.empty());
+        REQUIRE(0 == count);
     }
 
     SECTION("Inner and boundary intervals")
@@ -81,10 +78,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+        REQUIRE(count == Test::boundaryIntervals().size());
     }
 
     SECTION("Outer and inner intervals")
@@ -97,10 +93,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+        REQUIRE(count == Test::outerIntervals().size());
     }
 
     SECTION("Left intervals")
@@ -111,9 +106,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE(result.empty());
+        REQUIRE(0 == count);
     }
 
     SECTION("Left and outer intervals")
@@ -126,10 +121,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+        REQUIRE(count == Test::outerIntervals().size());
     }
 
     SECTION("Right intervals")
@@ -140,9 +134,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE(result.empty());
+        REQUIRE(0 == count);
     }
 
     SECTION("Right and outer intervals")
@@ -155,10 +149,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+        REQUIRE(count == Test::outerIntervals().size());
     }
 
     SECTION("Left overlapping intervals")
@@ -169,9 +162,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE(result.empty());
+        REQUIRE(0 == count);
     }
 
     SECTION("Left overlapping and outer intervals")
@@ -184,10 +177,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+        REQUIRE(count == Test::outerIntervals().size());
     }
 
     SECTION("Right overlapping intervals")
@@ -198,9 +190,9 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE(result.empty());
+        REQUIRE(0 == count);
     }
 
     SECTION("Right overlapping and outer intervals")
@@ -213,9 +205,8 @@ TEST_CASE("Find outer intervals")
             tree.insert(interval);
         }
 
-        auto result = tree.findOuterIntervals(Test::interval());
+        size_t count = tree.countOuterIntervals(Test::interval());
 
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+        REQUIRE(count == Test::outerIntervals().size());
     }
 }

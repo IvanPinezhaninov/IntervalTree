@@ -28,7 +28,8 @@ IntervalVector Test::outerIntervals()
         { 380, 520 },
         { 380, 530 },
         { 370, 530 },
-        { 360, 540 }
+        { 360, 540 },
+        { 350, 550 }
     };
 }
 
@@ -41,7 +42,9 @@ IntervalVector Test::leftIntervals()
         { 270, 380 },
         { 270, 370 },
         { 260, 370 },
-        { 250, 360 }
+        { 250, 360 },
+        { 240, 350 },
+        { 230, 340 }
     };
 }
 
@@ -54,7 +57,10 @@ IntervalVector Test::rightIntervals()
         { 520, 620 },
         { 520, 630 },
         { 530, 630 },
-        { 540, 640 }
+        { 540, 640 },
+        { 550, 650 },
+        { 560, 660 },
+        { 570, 670 }
     };
 }
 
@@ -63,6 +69,7 @@ IntervalVector Test::leftOverlappingIntervals()
 {
     return IntervalVector
     {
+        { 340, 440 },
         { 330, 430 },
         { 320, 420 },
         { 320, 410 },
@@ -76,6 +83,7 @@ IntervalVector Test::rightOverlappingIntervals()
 {
     return IntervalVector
     {
+        { 460, 560 },
         { 470, 570 },
         { 480, 580 },
         { 480, 590 },
