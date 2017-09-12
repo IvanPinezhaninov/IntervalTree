@@ -1,6 +1,6 @@
 # IntervalTree
 
-[![Linux Build Status](https://travis-ci.org/IvanPinezhaninov/intervaltree.svg?branch=master)](https://travis-ci.org/IvanPinezhaninov/intervaltree)
+[![Linux Build Status](https://travis-ci.org/IvanPinezhaninov/IntervalTree.svg?branch=master)](https://travis-ci.org/IvanPinezhaninov/intervaltree)
 
 ## Overview
 
@@ -26,7 +26,7 @@ int main()
     intervalTree.insert({ 80, 90 });
 
     // Find intervals
-    auto overlapingIntervals = intervalTree.findOverlappingIntervals({ 50, 80 });
+    auto overlappingIntervals = intervalTree.findOverlappingIntervals({ 50, 80 });
     auto innerIntervals = intervalTree.findInnerIntervals({ 50, 80 });
     auto outerIntervals = intervalTree.findOuterIntervals({ 50, 80 });
     auto intervalsContainPoint = intervalTree.findIntervalsContainPoint(50);
@@ -40,7 +40,7 @@ int main()
 
     // Print overlapping intervals
     std::cout << "Overlapping intervals:" << std::endl;
-    for (auto interval : overlapingIntervals) {
+    for (auto interval : overlappingIntervals) {
         std::cout << interval << std::endl;
     }
     std::cout << std::endl;
@@ -58,7 +58,7 @@ int main()
         std::cout << interval << std::endl;
     }
     std::cout << std::endl;
-    
+
     // Print intervals contain the point
     std::cout << "Intervals contain the point:" << std::endl;
     for (auto interval : intervalsContainPoint) {
