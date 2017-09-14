@@ -30,7 +30,7 @@ namespace Intervals {
 constexpr static const double outVectorReserveRate = 0.25;
 
 
-template <typename IntervalType, typename ValueType = int>
+template <typename IntervalType, typename ValueType = size_t>
 struct Interval
 {
     Interval(const IntervalType &a, const IntervalType &b) :
@@ -83,7 +83,9 @@ struct Interval
 
     bool operator==(const Interval &other) const
     {
-        return !(low < other.low || high < other.high || other.low < low || other.high < high);
+        return !(low < other.low || other.low < low
+                 || high < other.high || other.high < high
+                 || value < other.value || other.value < value);
     }
 
 
@@ -93,7 +95,7 @@ struct Interval
 };
 
 
-template <typename IntervalType, typename ValueType = int>
+template <typename IntervalType, typename ValueType = size_t>
 class IntervalTree
 {
     using IntervalVector = std::vector<Interval<IntervalType, ValueType>>;
@@ -716,7 +718,7 @@ private:
 
         subtreeIntervals(node->left, out);
 
-        out.insert(out.cend(), node->intervals.cbegin(), node->intervals.cend());
+        out.insert(out.end(), node->intervals.begin(), node->intervals.end());
 
         subtreeIntervals(node->right, out);
     }
