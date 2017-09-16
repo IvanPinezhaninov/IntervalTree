@@ -98,9 +98,11 @@ struct Interval
 template <typename IntervalType, typename ValueType = size_t>
 class IntervalTree
 {
-    using IntervalVector = std::vector<Interval<IntervalType, ValueType>>;
-
 public:
+    using Interval = Intervals::Interval<IntervalType, ValueType>;
+    using Intervals = std::vector<Interval>;
+    using size_type = std::size_t;
+
     IntervalTree() :
         m_nill(new Node()),
         m_root(m_nill),
@@ -162,7 +164,7 @@ public:
     }
 
 
-    bool insert(const Interval<IntervalType, ValueType> &interval)
+    bool insert(const Interval &interval)
     {
         assert(nullptr != m_root && nullptr != m_nill);
 
@@ -187,10 +189,7 @@ public:
 
         if (!isNodeHasInterval(node, interval)) {
             auto it = std::lower_bound(node->intervals.begin(), node->intervals.end(), interval,
-            [] (const Interval<IntervalType, ValueType> &a, const Interval<IntervalType, ValueType> &b) -> bool
-            {
-                return (a.high < b.high);
-            });
+                                       [] (const Interval &lhs, const Interval &rhs) -> bool { return (lhs.high < rhs.high); });
 
             node->intervals.insert(it, interval);
 
@@ -212,7 +211,7 @@ public:
     }
 
 
-    bool remove(const Interval<IntervalType, ValueType> &interval)
+    bool remove(const Interval &interval)
     {
         assert(nullptr != m_root && nullptr != m_nill);
 
@@ -298,7 +297,7 @@ public:
     }
 
 
-    bool contains(const Interval<IntervalType, ValueType> &interval) const
+    bool contains(const Interval &interval) const
     {
         assert(nullptr != m_root && nullptr != m_nill);
 
@@ -315,9 +314,9 @@ public:
     }
 
 
-    IntervalVector intervals() const
+    Intervals intervals() const
     {
-        IntervalVector out;
+        Intervals out;
         out.reserve(m_size);
 
         if (m_root != m_nill) {
@@ -328,156 +327,132 @@ public:
     }
 
 
-    void findOverlappingIntervals(const Interval<IntervalType, ValueType> &interval, IntervalVector &out) const
+    void findOverlappingIntervals(const Interval &interval, Intervals &out) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
-            {
-                out.push_back(interval);
-            });
+            subtreeOverlappingIntervals(m_root, interval, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    IntervalVector findOverlappingIntervals(const Interval<IntervalType, ValueType> &interval) const
+    Intervals findOverlappingIntervals(const Interval &interval) const
     {
-        IntervalVector out;
+        Intervals out;
         out.reserve(m_size * outVectorReserveRate);
         findOverlappingIntervals(interval, out);
         return out;
     }
 
 
-    void findInnerIntervals(const Interval<IntervalType, ValueType> &interval, IntervalVector &out) const
+    void findInnerIntervals(const Interval &interval, Intervals &out) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
-            {
-                out.push_back(interval);
-            });
+            subtreeInnerIntervals(m_root, interval, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    IntervalVector findInnerIntervals(const Interval<IntervalType, ValueType> &interval) const
+    Intervals findInnerIntervals(const Interval &interval) const
     {
-        IntervalVector out;
+        Intervals out;
         out.reserve(m_size * outVectorReserveRate);
         findInnerIntervals(interval, out);
         return out;
     }
 
 
-    void findOuterIntervals(const Interval<IntervalType, ValueType> &interval, IntervalVector &out) const
+    void findOuterIntervals(const Interval &interval, Intervals &out) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
-            {
-                out.push_back(interval);
-            });
+            subtreeOuterIntervals(m_root, interval, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    IntervalVector findOuterIntervals(const Interval<IntervalType, ValueType> &interval) const
+    Intervals findOuterIntervals(const Interval &interval) const
     {
-        IntervalVector out;
+        Intervals out;
         out.reserve(m_size * outVectorReserveRate);
         findOuterIntervals(interval, out);
         return out;
     }
 
 
-    void findIntervalsContainPoint(const IntervalType &point, IntervalVector &out) const
+    void findIntervalsContainPoint(const IntervalType &point, Intervals &out) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeIntervalsContainPoint(m_root, point, [&out] (const Interval<IntervalType, ValueType> &interval) -> void
-            {
-                out.push_back(interval);
-            });
+            subtreeIntervalsContainPoint(m_root, point, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    IntervalVector findIntervalsContainPoint(const IntervalType &point) const
+    Intervals findIntervalsContainPoint(const IntervalType &point) const
     {
-        IntervalVector out;
+        Intervals out;
         out.reserve(m_size * outVectorReserveRate);
         findIntervalsContainPoint(point, out);
         return out;
     }
 
 
-    size_t countOverlappingIntervals(const Interval<IntervalType, ValueType> &interval) const
+    size_type countOverlappingIntervals(const Interval &interval) const
     {
-        size_t count = 0;
+        size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
-            {
-                ++count;
-            });
+            subtreeOverlappingIntervals(m_root, interval, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
     }
 
 
-    size_t countInnerIntervals(const Interval<IntervalType, ValueType> &interval) const
+    size_type countInnerIntervals(const Interval &interval) const
     {
-        size_t count = 0;
+        size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
-            {
-                ++count;
-            });
+            subtreeInnerIntervals(m_root, interval, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
     }
 
 
-    size_t countOuterIntervals(const Interval<IntervalType, ValueType> &interval) const
+    size_type countOuterIntervals(const Interval &interval) const
     {
-        size_t count = 0;
+        size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, [&count] (const Interval<IntervalType, ValueType> &) -> void
-            {
-                ++count;
-            });
+            subtreeOuterIntervals(m_root, interval, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
     }
 
 
-    size_t countIntervalsContainPoint(const IntervalType &point) const
+    size_type countIntervalsContainPoint(const IntervalType &point) const
     {
-        size_t count = 0;
+        size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeIntervalsContainPoint(m_root, point, [&count] (const Interval<IntervalType, ValueType> &) -> void
-            {
-                ++count;
-            });
+            subtreeIntervalsContainPoint(m_root, point, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
@@ -490,7 +465,7 @@ public:
     }
 
 
-    size_t size() const
+    size_type size() const
     {
         return m_size;
     }
@@ -523,7 +498,7 @@ private:
     {
         Node() = default;
 
-        Node(const Interval<IntervalType, ValueType> &interval, Color col, Node *nill) :
+        Node(const Interval &interval, Color col, Node *nill) :
             color(col),
             parent(nill),
             left(nill),
@@ -543,7 +518,7 @@ private:
         IntervalType high;
         IntervalType minHigh;
         IntervalType maxHigh;
-        IntervalVector intervals;
+        Intervals intervals;
     };
 
 
@@ -584,7 +559,7 @@ private:
     }
 
 
-    Node *findNode(Node *node, const Interval<IntervalType, ValueType> &interval) const
+    Node *findNode(Node *node, const Interval &interval) const
     {
         assert(nullptr != node);
         assert(node != m_nill);
@@ -659,7 +634,7 @@ private:
     }
 
 
-    void createChildNode(Node *parent, const Interval<IntervalType, ValueType> &interval, Position position)
+    void createChildNode(Node *parent, const Interval &interval, Position position)
     {
         assert(nullptr != parent);
         assert(childNode(parent, position) == m_nill);
@@ -708,7 +683,7 @@ private:
     }
 
 
-    void subtreeIntervals(Node *node, IntervalVector &out) const
+    void subtreeIntervals(Node *node, Intervals &out) const
     {
         assert(nullptr != node);
 
@@ -725,7 +700,7 @@ private:
 
 
     template<typename Callback>
-    void subtreeOverlappingIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, Callback &&callback) const
+    void subtreeOverlappingIntervals(Node *node, const Interval &interval, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -756,7 +731,7 @@ private:
 
 
     template<typename Callback>
-    void subtreeInnerIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, Callback &&callback) const
+    void subtreeInnerIntervals(Node *node, const Interval &interval, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -785,7 +760,7 @@ private:
 
 
     template<typename Callback>
-    void subtreeOuterIntervals(Node *node, const Interval<IntervalType, ValueType> &interval, Callback &&callback) const
+    void subtreeOuterIntervals(Node *node, const Interval &interval, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -848,7 +823,7 @@ private:
     }
 
 
-    bool isNodeHasInterval(Node *node, const Interval<IntervalType, ValueType> &interval) const
+    bool isNodeHasInterval(Node *node, const Interval &interval) const
     {
         assert(nullptr != node);
 
@@ -856,15 +831,12 @@ private:
     }
 
 
-    IntervalType findHighest(const IntervalVector &intervals) const
+    IntervalType findHighest(const Intervals &intervals) const
     {
         assert(!intervals.empty());
 
         auto it = std::max_element(intervals.cbegin(), intervals.cend(),
-        [] (const Interval<IntervalType, ValueType> &a, const Interval<IntervalType, ValueType> &b) -> bool
-        {
-            return a.high < b.high;
-        });
+                                   [] (const Interval &lhs, const Interval &rhs) -> bool { return lhs.high < rhs.high; });
 
         assert(it != intervals.cend());
 
@@ -872,15 +844,15 @@ private:
     }
 
 
-    bool isNotEqual(const IntervalType &a, const IntervalType &b) const
+    bool isNotEqual(const IntervalType &lhs, const IntervalType &rhs) const
     {
-        return (a < b || b < a);
+        return (lhs < rhs || rhs < lhs);
     }
 
 
-    bool isEqual(const IntervalType &a, const IntervalType &b) const
+    bool isEqual(const IntervalType &lhs, const IntervalType &rhs) const
     {
-        return !isNotEqual(a, b);
+        return !isNotEqual(lhs, rhs);
     }
 
 
@@ -988,11 +960,11 @@ private:
     }
 
 
-    void removeFixNodeLimits(Node *node, size_t minRange = 0)
+    void removeFixNodeLimits(Node *node, size_type minRange = 0)
     {
         assert(nullptr != node && nullptr != node->parent);
 
-        size_t range = 0;
+        size_type range = 0;
         while (node != m_nill) {
             bool finish = (minRange < range);
 
@@ -1084,14 +1056,14 @@ private:
 
     Node *m_nill;
     Node *m_root;
-    size_t m_size;
+    size_type m_size;
 };
 
 
 template <typename T>
-void swap(IntervalTree<T> &a, IntervalTree<T> &b)
+void swap(IntervalTree<T> &lhs, IntervalTree<T> &rhs)
 {
-    a.swap(b);
+    lhs.swap(rhs);
 }
 
 } // namespace Intervals
