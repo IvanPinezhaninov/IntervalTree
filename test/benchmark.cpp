@@ -82,7 +82,7 @@ TEST_CASE("Benchmark")
 
         for (const Interval &searchInterval : searchIntervals) {
             IntervalVector foundIntervals;
-            foundIntervals.reserve(size_t(intervals.size() * Intervals::outVectorReserveRate));
+            foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
             for (const Interval &interval : intervals) {
                 if (searchInterval.low <= interval.high && interval.low <= searchInterval.high) {
                     foundIntervals.push_back(interval);
@@ -116,7 +116,7 @@ TEST_CASE("Benchmark")
 
         for (const Interval &searchInterval : searchIntervals) {
             IntervalVector foundIntervals;
-            foundIntervals.reserve(size_t(intervals.size() * Intervals::outVectorReserveRate));
+            foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
             for (const Interval &interval : intervals) {
                 if (searchInterval.low <= interval.low && interval.high <= searchInterval.high) {
                     foundIntervals.push_back(interval);
@@ -150,7 +150,7 @@ TEST_CASE("Benchmark")
 
         for (const Interval &searchInterval : searchIntervals) {
             IntervalVector foundIntervals;
-            foundIntervals.reserve(size_t(intervals.size() * Intervals::outVectorReserveRate));
+            foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
             for (const Interval &interval : intervals) {
                 if (interval.low <= searchInterval.low && searchInterval.high <= interval.high) {
                     foundIntervals.push_back(interval);
@@ -183,7 +183,7 @@ TEST_CASE("Benchmark")
 
         for (int i = 0; i < int(SIZE); ++i) {
             IntervalVector foundIntervals;
-            foundIntervals.reserve(size_t(intervals.size() * Intervals::outVectorReserveRate));
+            foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
             for (const Interval &interval : intervals) {
                 if (interval.low <= i && i <= interval.high) {
                     foundIntervals.push_back(interval);

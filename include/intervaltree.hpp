@@ -27,7 +27,7 @@
 
 namespace Intervals {
 
-constexpr static const double outVectorReserveRate = 0.25;
+constexpr static const double VECTOR_RESERVE_RATE = 0.25;
 
 
 template <typename IntervalType, typename ValueType = size_t>
@@ -223,8 +223,8 @@ public:
                 node->high = interval.high;
             }
 
-            if (node->maxHigh < node->high) {
-                node->maxHigh = node->high;
+            if (node->highest < node->high) {
+                node->highest = node->high;
                 insertionFixNodeLimits(node);
             }
 
@@ -308,7 +308,7 @@ public:
                     node->high = findHighest(node->intervals);
                 }
 
-                if (isEqual(interval.high, node->maxHigh)) {
+                if (isEqual(interval.high, node->highest)) {
                     removeFixNodeLimits(node);
                 }
 
@@ -368,7 +368,7 @@ public:
     Intervals findOverlappingIntervals(const Interval &interval) const
     {
         Intervals out;
-        out.reserve(m_size * outVectorReserveRate);
+        out.reserve(m_size * VECTOR_RESERVE_RATE);
         findOverlappingIntervals(interval, out);
         return out;
     }
@@ -389,7 +389,7 @@ public:
     Intervals findInnerIntervals(const Interval &interval) const
     {
         Intervals out;
-        out.reserve(m_size * outVectorReserveRate);
+        out.reserve(m_size * VECTOR_RESERVE_RATE);
         findInnerIntervals(interval, out);
         return out;
     }
@@ -410,7 +410,7 @@ public:
     Intervals findOuterIntervals(const Interval &interval) const
     {
         Intervals out;
-        out.reserve(m_size * outVectorReserveRate);
+        out.reserve(m_size * VECTOR_RESERVE_RATE);
         findOuterIntervals(interval, out);
         return out;
     }
@@ -431,7 +431,7 @@ public:
     Intervals findIntervalsContainPoint(const IntervalType &point) const
     {
         Intervals out;
-        out.reserve(m_size * outVectorReserveRate);
+        out.reserve(m_size * VECTOR_RESERVE_RATE);
         findIntervalsContainPoint(point, out);
         return out;
     }
@@ -530,8 +530,8 @@ private:
             left(nill),
             right(nill),
             high(interval.high),
-            minHigh(interval.low),
-            maxHigh(interval.high)
+            lowest(interval.low),
+            highest(interval.high)
         {
             intervals.push_back(interval);
         }
@@ -542,8 +542,8 @@ private:
         Node *right = nullptr;
 
         IntervalType high;
-        IntervalType minHigh;
-        IntervalType maxHigh;
+        IntervalType lowest;
+        IntervalType highest;
         Intervals intervals;
     };
 
@@ -559,8 +559,8 @@ private:
         Node *node = new Node();
         node->intervals = otherNode->intervals;
         node->high = otherNode->high;
-        node->minHigh = otherNode->minHigh;
-        node->maxHigh = otherNode->maxHigh;
+        node->lowest = otherNode->lowest;
+        node->highest = otherNode->highest;
         node->color = otherNode->color;
         node->parent = parent;
         node->left = copySubtree(otherNode->left, otherNill, node);
@@ -687,16 +687,16 @@ private:
         Node *left = isNodeAboutToBeDestroyed(node->left) ? m_nill : node->left;
         Node *right = isNodeAboutToBeDestroyed(node->right) ? m_nill : node->right;
 
-        const IntervalType lowest = (left != m_nill) ? left->minHigh : node->intervals.front().low;
+        const IntervalType lowest = (left != m_nill) ? left->lowest : node->intervals.front().low;
 
-        if (isNotEqual(node->minHigh, lowest)) {
-            node->minHigh = lowest;
+        if (isNotEqual(node->lowest, lowest)) {
+            node->lowest = lowest;
         }
 
-        const IntervalType highest = std::max({ left->maxHigh, right->maxHigh, node->high });
+        const IntervalType highest = std::max({ left->highest, right->highest, node->high });
 
-        if (isNotEqual(node->maxHigh, highest)) {
-            node->maxHigh = highest;
+        if (isNotEqual(node->highest, highest)) {
+            node->highest = highest;
         }
     }
 
@@ -745,12 +745,12 @@ private:
         }
 
         if (node->right != m_nill
-                && !(node->right->maxHigh < interval.low)
-                && !(interval.high < node->right->minHigh)) {
+                && !(node->right->highest < interval.low)
+                && !(interval.high < node->right->lowest)) {
             subtreeOverlappingIntervals(node->right, interval, callback);
         }
 
-        if (node->left != m_nill && !(node->left->maxHigh < interval.low)) {
+        if (node->left != m_nill && !(node->left->highest < interval.low)) {
             subtreeOverlappingIntervals(node->left, interval, callback);
         }
     }
@@ -774,12 +774,12 @@ private:
                 }
             }
 
-            if (node->left != m_nill && !(node->left->maxHigh < interval.low)) {
+            if (node->left != m_nill && !(node->left->highest < interval.low)) {
                 subtreeInnerIntervals(node->left, interval, callback);
             }
         }
 
-        if (node->right != m_nill && !(interval.high < node->right->minHigh)) {
+        if (node->right != m_nill && !(interval.high < node->right->lowest)) {
             subtreeInnerIntervals(node->right, interval, callback);
         }
     }
@@ -804,15 +804,15 @@ private:
             }
 
             if (node->right != m_nill
-                    && !(interval.low < node->right->minHigh)
-                    && !(node->right->maxHigh < interval.high)) {
+                    && !(interval.low < node->right->lowest)
+                    && !(node->right->highest < interval.high)) {
                 subtreeOuterIntervals(node->right, interval, callback);
             }
         }
 
         if (node->left != m_nill
-                && !(interval.low < node->left->minHigh)
-                && !(node->left->maxHigh < interval.high)) {
+                && !(interval.low < node->left->lowest)
+                && !(node->left->highest < interval.high)) {
             subtreeOuterIntervals(node->left, interval, callback);
         }
     }
@@ -838,12 +838,12 @@ private:
                 }
             }
 
-            if (node->right != m_nill && !(node->right->maxHigh < point)) {
+            if (node->right != m_nill && !(node->right->highest < point)) {
                 subtreeIntervalsContainPoint(node->right, point, callback);
             }
         }
 
-        if (node->left != m_nill && !(node->left->maxHigh < point)) {
+        if (node->left != m_nill && !(node->left->highest < point)) {
             subtreeIntervalsContainPoint(node->left, point, callback);
         }
     }
@@ -906,12 +906,12 @@ private:
 
         updateNodeLimits(node);
 
-        if (child->maxHigh < node->maxHigh) {
-            child->maxHigh = node->maxHigh;
+        if (child->highest < node->highest) {
+            child->highest = node->highest;
         }
 
-        if (node->minHigh < child->minHigh) {
-            child->minHigh = node->minHigh;
+        if (node->lowest < child->lowest) {
+            child->lowest = node->lowest;
         }
     }
 
@@ -967,13 +967,13 @@ private:
         while (node->parent != m_nill) {
             bool finish = true;
 
-            if (node->parent->maxHigh < node->maxHigh) {
-                node->parent->maxHigh = node->maxHigh;
+            if (node->parent->highest < node->highest) {
+                node->parent->highest = node->highest;
                 finish = false;
             }
 
-            if (node->minHigh < node->parent->minHigh) {
-                node->parent->minHigh = node->minHigh;
+            if (node->lowest < node->parent->lowest) {
+                node->parent->lowest = node->lowest;
                 finish = false;
             }
 
@@ -996,11 +996,11 @@ private:
 
             updateNodeLimits(node);
 
-            if (isNotEqual(node->maxHigh, node->parent->maxHigh)) {
+            if (isNotEqual(node->highest, node->parent->highest)) {
                 finish = false;
             }
 
-            if (isNotEqual(node->minHigh, node->parent->minHigh)) {
+            if (isNotEqual(node->lowest, node->parent->lowest)) {
                 finish = false;
             }
 
