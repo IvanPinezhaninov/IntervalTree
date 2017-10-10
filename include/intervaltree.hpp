@@ -33,18 +33,16 @@ constexpr static const double outVectorReserveRate = 0.25;
 template <typename IntervalType, typename ValueType = size_t>
 struct Interval
 {
-    Interval(const IntervalType &a, const IntervalType &b) :
-        low(std::min(a, b)),
-        high(std::max(a, b)),
-        value(ValueType())
-    {
-    }
-
-
     Interval(const IntervalType &a, const IntervalType &b, const ValueType &val) :
         low(std::min(a, b)),
         high(std::max(a, b)),
         value(val)
+    {
+    }
+
+
+    Interval(const IntervalType &a, const IntervalType &b) :
+        Interval(a, b, ValueType())
     {
     }
 
@@ -89,6 +87,12 @@ struct Interval
     }
 
 
+    bool operator<(const Interval &other) const
+    {
+        return (low < other.low || high < other.high);
+    }
+
+
     IntervalType low;
     IntervalType high;
     ValueType value;
@@ -103,11 +107,33 @@ public:
     using Intervals = std::vector<Interval>;
     using size_type = std::size_t;
 
+
     IntervalTree() :
         m_nill(new Node()),
         m_root(m_nill),
         m_size(0)
     {
+    }
+
+
+    template <typename Container>
+    IntervalTree(const Container &intervals) :
+        IntervalTree()
+    {
+        for (const Interval &interval : intervals) {
+            insert(interval);
+        }
+    }
+
+
+    template <typename ForwardIterator>
+    IntervalTree(ForwardIterator begin, ForwardIterator end) :
+        IntervalTree()
+    {
+        while (begin != end) {
+            insert(*begin);
+            ++begin;
+        }
     }
 
 

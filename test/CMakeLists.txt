@@ -22,6 +22,7 @@ set(SOURCES
     utils/timer.cpp
     utils/random.cpp
     benchmark.cpp
+    constructors.cpp
     countinnerintervals.cpp
     countintervalscontainpoint.cpp
     countouterintervals.cpp
