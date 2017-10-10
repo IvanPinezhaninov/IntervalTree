@@ -725,7 +725,7 @@ private:
     }
 
 
-    template<typename Callback>
+    template <typename Callback>
     void subtreeOverlappingIntervals(Node *node, const Interval &interval, Callback &&callback) const
     {
         assert(nullptr != node);
@@ -756,7 +756,7 @@ private:
     }
 
 
-    template<typename Callback>
+    template <typename Callback>
     void subtreeInnerIntervals(Node *node, const Interval &interval, Callback &&callback) const
     {
         assert(nullptr != node);
@@ -785,7 +785,7 @@ private:
     }
 
 
-    template<typename Callback>
+    template <typename Callback>
     void subtreeOuterIntervals(Node *node, const Interval &interval, Callback &&callback) const
     {
         assert(nullptr != node);
@@ -818,7 +818,7 @@ private:
     }
 
 
-    template<typename Callback>
+    template <typename Callback>
     void subtreeIntervalsContainPoint(Node *node, const IntervalType &point, Callback &&callback) const
     {
         assert(nullptr != node);
