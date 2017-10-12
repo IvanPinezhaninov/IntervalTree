@@ -1,6 +1,7 @@
 # IntervalTree
 
 [![Linux Build Status](https://travis-ci.org/IvanPinezhaninov/IntervalTree.svg?branch=master)](https://travis-ci.org/IvanPinezhaninov/IntervalTree)
+[![MIT License](https://img.shields.io/badge/license-mit-blue.svg?style=flat)](http://opensource.org/licenses/MIT)
 
 ## Overview
 
