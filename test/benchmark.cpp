@@ -4,6 +4,7 @@
 #include "timer.h"
 
 #include <iostream>
+#include <random>
 
 static const size_t SIZE = 1000;
 
