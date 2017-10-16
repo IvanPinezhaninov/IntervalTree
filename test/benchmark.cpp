@@ -49,7 +49,9 @@ TEST_CASE("Benchmark")
     // Vector: Remove intervals
     {
         IntervalVector removingIntervals = intervals;
-        std::random_shuffle(removingIntervals.begin(), removingIntervals.end());
+
+        auto rand = std::default_random_engine {};
+        std::shuffle(removingIntervals.begin(), removingIntervals.end(), rand);
 
         const Timer::Time &start = Timer::now();
 
