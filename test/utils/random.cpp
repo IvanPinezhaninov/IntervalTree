@@ -37,19 +37,7 @@ IntervalVector Random::createIntervals(size_t treeSize)
 }
 
 
-IntervalTree Random::createTree(const IntervalVector &intervals)
-{
-    IntervalTree tree;
-
-    for (const Interval &interval : intervals) {
-        tree.insert(interval);
-    }
-
-    return tree;
-}
-
-
 IntervalTree Random::createTree(size_t treeSize)
 {
-    return createTree(createIntervals(treeSize));
+    return IntervalTree(createIntervals(treeSize));
 }

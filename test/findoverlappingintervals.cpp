@@ -6,233 +6,169 @@ TEST_CASE("Find overlapping intervals")
 {
     SECTION("Empty tree")
     {
-        IntervalTree tree;
+        const IntervalTree tree;
+        const auto result = tree.findOverlappingIntervals(Test::interval());
+
         REQUIRE(tree.isEmpty());
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
-
         REQUIRE(result.empty());
     }
+
 
     SECTION("Boundary interval")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::boundaryIntervals();
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto tree = IntervalTree(Test::boundaryIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
     }
+
 
     SECTION("Outer intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::outerIntervals();
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto tree = IntervalTree(Test::outerIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
     }
+
 
     SECTION("Outer and boundary intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
     }
+
 
     SECTION("Inner intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::innerIntervals();
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto tree = IntervalTree(Test::innerIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
     }
+
 
     SECTION("Inner and boundary intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::compositeIntervals(Test::innerIntervals(), Test::boundaryIntervals());
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto intervals = Test::compositeIntervals(Test::innerIntervals(), Test::boundaryIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
     }
+
 
     SECTION("Outer and inner intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::innerIntervals());
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::innerIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
     }
+
 
     SECTION("Left intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::leftIntervals();
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto tree = IntervalTree(Test::leftIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
 
-    SECTION("Left and inner intervals")
+
+    SECTION("Left and inner result")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
     }
+
 
     SECTION("Right intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::rightIntervals();
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto tree = IntervalTree(Test::rightIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
 
+
     SECTION("Right and inner intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
     }
 
+
     SECTION("Left overlapping intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::leftOverlappingIntervals();
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto tree = IntervalTree(Test::leftOverlappingIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::leftOverlappingIntervals().cbegin()));
     }
+
 
     SECTION("Left overlapping and inner intervals")
     {
-        IntervalTree tree;
-
-        auto intervals = Test::compositeIntervals(Test::leftOverlappingIntervals(), Test::innerIntervals());
-
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
+        const auto intervals = Test::compositeIntervals(Test::leftOverlappingIntervals(), Test::innerIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
     }
+
 
     SECTION("Right overlapping intervals")
     {
-        IntervalTree tree;
+        const auto tree = IntervalTree(Test::rightOverlappingIntervals());
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
-        auto intervals = Test::rightOverlappingIntervals();
+        REQUIRE_FALSE(result.empty());
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::rightOverlappingIntervals().cbegin()));
+    }
 
-        for (auto interval : intervals) {
-            tree.insert(interval);
-        }
 
-        auto result = tree.findOverlappingIntervals(Test::interval());
+    SECTION("Right overlapping and inner intervals")
+    {
+        const auto intervals = Test::compositeIntervals(Test::rightOverlappingIntervals(), Test::innerIntervals());
+        const auto tree = IntervalTree(intervals);
+        const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
     }
 
-    SECTION("Right overlapping and inner intervals")
+
+    SECTION("Overlapping intervals order")
     {
-        IntervalTree tree;
+        const auto tree = IntervalTree(Test::innerIntervals());
+        const auto intervals = tree.findOverlappingIntervals(Test::interval());
 
-        auto intervals = Test::compositeIntervals(Test::rightOverlappingIntervals(), Test::innerIntervals());
+        REQUIRE_FALSE(intervals.empty());
 
+        Interval previousInterval(0, 0);
         for (auto interval : intervals) {
-            tree.insert(interval);
+            REQUIRE(previousInterval < interval);
         }
-
-        auto result = tree.findOverlappingIntervals(Test::interval());
-
-        REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
     }
 }

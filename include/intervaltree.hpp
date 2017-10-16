@@ -687,13 +687,13 @@ private:
         Node *left = isNodeAboutToBeDestroyed(node->left) ? m_nill : node->left;
         Node *right = isNodeAboutToBeDestroyed(node->right) ? m_nill : node->right;
 
-        const IntervalType lowest = (left != m_nill) ? left->lowest : node->intervals.front().low;
+        const IntervalType &lowest = (left != m_nill) ? left->lowest : node->intervals.front().low;
 
         if (isNotEqual(node->lowest, lowest)) {
             node->lowest = lowest;
         }
 
-        const IntervalType highest = std::max({ left->highest, right->highest, node->high });
+        const IntervalType &highest = std::max({ left->highest, right->highest, node->high });
 
         if (isNotEqual(node->highest, highest)) {
             node->highest = highest;
@@ -734,6 +734,10 @@ private:
             return;
         }
 
+        if (node->left != m_nill && !(node->left->highest < interval.low)) {
+            subtreeOverlappingIntervals(node->left, interval, std::forward<Callback>(callback));
+        }
+
         if (!(interval.high < node->intervals.front().low) && !(node->high < interval.low)) {
             for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
                 if (!(it->high < interval.low)) {
@@ -749,10 +753,6 @@ private:
                 && !(interval.high < node->right->lowest)) {
             subtreeOverlappingIntervals(node->right, interval, std::forward<Callback>(callback));
         }
-
-        if (node->left != m_nill && !(node->left->highest < interval.low)) {
-            subtreeOverlappingIntervals(node->left, interval, std::forward<Callback>(callback));
-        }
     }
 
 
@@ -766,16 +766,16 @@ private:
         }
 
         if (!(node->intervals.front().low < interval.low)) {
+            if (node->left != m_nill && !(node->left->highest < interval.low)) {
+                subtreeInnerIntervals(node->left, interval, std::forward<Callback>(callback));
+            }
+
             for (auto it = node->intervals.begin(); it != node->intervals.end(); ++it) {
                 if (!(interval.high < it->high)) {
                     callback(*it);
                 } else {
                     break;
                 }
-            }
-
-            if (node->left != m_nill && !(node->left->highest < interval.low)) {
-                subtreeInnerIntervals(node->left, interval, std::forward<Callback>(callback));
             }
         }
 
@@ -794,6 +794,12 @@ private:
             return;
         }
 
+        if (node->left != m_nill
+                && !(interval.low < node->left->lowest)
+                && !(node->left->highest < interval.high)) {
+            subtreeOuterIntervals(node->left, interval, std::forward<Callback>(callback));
+        }
+
         if (!(interval.low < node->intervals.front().low)) {
             for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
                 if (!(it->high < interval.high)) {
@@ -809,12 +815,6 @@ private:
                 subtreeOuterIntervals(node->right, interval, std::forward<Callback>(callback));
             }
         }
-
-        if (node->left != m_nill
-                && !(interval.low < node->left->lowest)
-                && !(node->left->highest < interval.high)) {
-            subtreeOuterIntervals(node->left, interval, std::forward<Callback>(callback));
-        }
     }
 
 
@@ -825,6 +825,10 @@ private:
 
         if (node == m_nill) {
             return;
+        }
+
+        if (node->left != m_nill && !(node->left->highest < point)) {
+            subtreeIntervalsContainPoint(node->left, point, std::forward<Callback>(callback));
         }
 
         if (!(point < node->intervals.front().low)) {
@@ -841,10 +845,6 @@ private:
             if (node->right != m_nill && !(node->right->highest < point)) {
                 subtreeIntervalsContainPoint(node->right, point, std::forward<Callback>(callback));
             }
-        }
-
-        if (node->left != m_nill && !(node->left->highest < point)) {
-            subtreeIntervalsContainPoint(node->left, point, std::forward<Callback>(callback));
         }
     }
 

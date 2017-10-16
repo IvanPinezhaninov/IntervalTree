@@ -11,7 +11,7 @@ static const size_t SIZE = 1000;
 TEST_CASE("Benchmark")
 {
     const IntervalVector &intervals = Random::createIntervals(SIZE);
-    const IntervalTree &tree = Random::createTree(intervals);
+    const IntervalTree tree = IntervalTree(intervals);
     const IntervalVector &searchIntervals = Random::createIntervals(SIZE);
 
 
@@ -31,9 +31,13 @@ TEST_CASE("Benchmark")
 
     // Tree: Insert intervals
     {
+        IntervalTree tree;
+
         const Timer::Time &start = Timer::now();
 
-        Random::createTree(intervals);
+        for (const Interval &interval : intervals) {
+            tree.insert(interval);
+        }
 
         Timer::printTimeElapsed(start, SIZE, "Tree:   Insert intervals");
     }
@@ -61,7 +65,7 @@ TEST_CASE("Benchmark")
 
     // Tree: Remove intervals
     {
-        IntervalTree tree = Random::createTree(intervals);
+        IntervalTree tree = IntervalTree(intervals);
 
         const Timer::Time &start = Timer::now();
 
