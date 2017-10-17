@@ -1,5 +1,8 @@
 #include "random.h"
 
+#include <random>
+
+
 static const size_t MIN_VALUE = 1;
 static const size_t MAX_VALUE = 1000000;
 static const size_t MIN_RANGE = 1;
@@ -9,7 +12,12 @@ static const size_t MAX_RANGE = 1000;
 int rand(int min, int max)
 {
     assert(min < max);
-    return std::rand() % (max - min + 1) + min;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(min, max);
+
+    return dis(gen);
 }
 
 
