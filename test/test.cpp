@@ -1,7 +1,8 @@
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_RUNNER
 
 #include "catch.hpp"
 #include "common.h"
+#include "random.h"
 
 
 TEST_CASE("Intervals with the same boundaries and different values")
@@ -26,4 +27,23 @@ TEST_CASE("Intervals with the same boundaries and different values")
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
+}
+
+
+int main(int argc, char* argv[]) {
+    Catch::Session session;
+
+    const int res = session.applyCommandLine(argc, argv);
+    if (0 != res) {
+        return res;
+    }
+
+    uint64_t seed = session.config().rngSeed();
+    if (0 == seed) {
+        seed = Catch::getCurrentNanosecondsSinceEpoch();
+    }
+
+    Random::setRndGeneratorSeed(seed);
+
+    return session.run(argc, argv);
 }

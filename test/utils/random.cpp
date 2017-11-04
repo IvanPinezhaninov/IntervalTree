@@ -8,15 +8,19 @@ static const size_t MAX_VALUE = 1000000;
 static const size_t MIN_RANGE = 1;
 static const size_t MAX_RANGE = 1000;
 
+static std::mt19937 gen;
+
+
+void Random::setRndGeneratorSeed(uint64_t seed)
+{
+    gen.seed(seed);
+}
+
 
 int rand(int min, int max)
 {
     assert(min < max);
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(min, max);
-
     return dis(gen);
 }
 

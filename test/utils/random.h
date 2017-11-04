@@ -6,6 +6,8 @@
 
 namespace Random {
 
+void setRndGeneratorSeed(uint64_t seed);
+
 Interval createInterval();
 
 IntervalVector createIntervals(size_t treeSize);
