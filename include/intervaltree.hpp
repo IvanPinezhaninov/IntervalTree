@@ -47,36 +47,16 @@ struct Interval
     }
 
 
-    Interval(const std::pair<IntervalType, IntervalType> &interval) :
-        Interval(interval.first, interval.second)
-    {
-    }
-
-
-    Interval(const std::pair<IntervalType, IntervalType> &interval, const ValueType &val) :
-        Interval(interval.first, interval.second, val)
-    {
-    }
-
-
-    Interval(const std::tuple<IntervalType, IntervalType> &interval) :
-        Interval(std::get<0>(interval), std::get<1>(interval))
-    {
-    }
-
-
     Interval(const std::tuple<IntervalType, IntervalType> &interval, const ValueType &val) :
         Interval(std::get<0>(interval), std::get<1>(interval), val)
     {
     }
 
 
-    Interval() = default;
-    Interval(const Interval &) = default;
-    Interval(Interval &&) = default;
-    Interval &operator=(const Interval &) = default;
-    Interval &operator=(Interval &&) = default;
-    virtual ~Interval() = default;
+    Interval(const std::tuple<IntervalType, IntervalType> &interval) :
+        Interval(std::get<0>(interval), std::get<1>(interval), ValueType())
+    {
+    }
 
 
     bool operator==(const Interval &other) const

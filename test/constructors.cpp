@@ -8,7 +8,103 @@ using IntervalList = std::list<Interval>;
 using IntervalSet = std::set<Interval>;
 
 
-TEST_CASE("Constructor for list container")
+TEST_CASE("Interval constructor for regular values")
+{
+    {
+        Interval interval(1, 2);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(0 == interval.value);
+    }
+
+    {
+        Interval interval(2, 1);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(0 == interval.value);
+    }
+
+    {
+        Interval interval(1, 2, 3);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(3 == interval.value);
+    }
+
+    {
+        Interval interval(2, 1, 3);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(3 == interval.value);
+    }
+}
+
+
+TEST_CASE("Interval constructor for pair")
+{
+    {
+        Interval interval(std::make_pair(1, 2));
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(0 == interval.value);
+    }
+
+    {
+        Interval interval(std::make_pair(2, 1));
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(0 == interval.value);
+    }
+
+    {
+        Interval interval(std::make_pair(1, 2), 3);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(3 == interval.value);
+    }
+
+    {
+        Interval interval(std::make_pair(2, 1), 3);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(3 == interval.value);
+    }
+}
+
+
+TEST_CASE("Interval constructor for tuple")
+{
+    {
+        Interval interval(std::make_tuple(1, 2));
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(0 == interval.value);
+    }
+
+    {
+        Interval interval(std::make_tuple(2, 1));
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(0 == interval.value);
+    }
+
+    {
+        Interval interval(std::make_tuple(1, 2), 3);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(3 == interval.value);
+    }
+
+    {
+        Interval interval(std::make_tuple(2, 1), 3);
+        REQUIRE(1 == interval.low);
+        REQUIRE(2 == interval.high);
+        REQUIRE(3 == interval.value);
+    }
+}
+
+
+TEST_CASE("IntervalTree constructor for list container")
 {
     IntervalList intervals
     {
@@ -25,7 +121,7 @@ TEST_CASE("Constructor for list container")
 }
 
 
-TEST_CASE("Constructor for set container")
+TEST_CASE("IntervalTree constructor for set container")
 {
     IntervalSet intervals
     {
@@ -42,7 +138,7 @@ TEST_CASE("Constructor for set container")
 }
 
 
-TEST_CASE("Constructor for vector container")
+TEST_CASE("IntervalTree constructor for vector container")
 {
     IntervalVector intervals
     {
@@ -59,7 +155,7 @@ TEST_CASE("Constructor for vector container")
 }
 
 
-TEST_CASE("Constructor for list container iterators")
+TEST_CASE("IntervalTree constructor for list container iterators")
 {
     IntervalList intervals
     {
@@ -76,7 +172,7 @@ TEST_CASE("Constructor for list container iterators")
 }
 
 
-TEST_CASE("Constructor for set container iterators")
+TEST_CASE("IntervalTree constructor for set container iterators")
 {
     IntervalSet intervals
     {
@@ -93,7 +189,7 @@ TEST_CASE("Constructor for set container iterators")
 }
 
 
-TEST_CASE("Constructor for vector container iterators")
+TEST_CASE("IntervalTree constructor for vector container iterators")
 {
     IntervalVector intervals
     {
