@@ -24,6 +24,32 @@ TEST_CASE("Find overlapping intervals")
     }
 
 
+    SECTION("Left boundary intervals")
+    {
+        const auto tree = IntervalTree(Test::leftBoundaryIntervals());
+
+        auto result = tree.findOverlappingIntervals(Test::interval(), true);
+        REQUIRE_FALSE(result.empty());
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::leftBoundaryIntervals().cbegin()));
+
+        result = tree.findOverlappingIntervals(Test::interval(), false);
+        REQUIRE(result.empty());
+    }
+
+
+    SECTION("Right boundary intervals")
+    {
+        const auto tree = IntervalTree(Test::rightBoundaryIntervals());
+
+        auto result = tree.findOverlappingIntervals(Test::interval(), true);
+        REQUIRE_FALSE(result.empty());
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::rightBoundaryIntervals().cbegin()));
+
+        result = tree.findOverlappingIntervals(Test::interval(), false);
+        REQUIRE(result.empty());
+    }
+
+
     SECTION("Outer intervals")
     {
         const auto tree = IntervalTree(Test::outerIntervals());

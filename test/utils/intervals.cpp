@@ -99,6 +99,28 @@ IntervalVector Test::boundaryIntervals()
 }
 
 
+IntervalVector Test::leftBoundaryIntervals()
+{
+    return IntervalVector
+    {
+        { 100, 400 },
+        { 200, 400 },
+        { 300, 400 }
+    };
+}
+
+
+IntervalVector Test::rightBoundaryIntervals()
+{
+    return IntervalVector
+    {
+        { 500, 600 },
+        { 500, 700 },
+        { 500, 800 }
+    };
+}
+
+
 IntervalVector Test::compositeIntervals(const IntervalVector &a, const IntervalVector &b)
 {
     IntervalVector composite = a;

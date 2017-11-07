@@ -30,20 +30,26 @@ TEST_CASE("Find intervals contain point")
     SECTION("Boundary interval left boundary point")
     {
         const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto result = tree.findIntervalsContainPoint(leftBoundaryPoint);
 
+        auto result = tree.findIntervalsContainPoint(leftBoundaryPoint, true);
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        result = tree.findIntervalsContainPoint(leftBoundaryPoint, false);
+        REQUIRE(result.empty());
     }
 
 
     SECTION("Boundary interval right boundary point")
     {
         const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto result = tree.findIntervalsContainPoint(rightBoundaryPoint);
 
+        auto result = tree.findIntervalsContainPoint(rightBoundaryPoint, true);
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        result = tree.findIntervalsContainPoint(rightBoundaryPoint, false);
+        REQUIRE(result.empty());
     }
 
 

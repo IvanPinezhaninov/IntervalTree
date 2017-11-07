@@ -23,6 +23,30 @@ TEST_CASE("Count overlapping intervals")
     }
 
 
+    SECTION("Left boundary intervals")
+    {
+        const auto tree = IntervalTree(Test::leftBoundaryIntervals());
+
+        auto count = tree.countOverlappingIntervals(Test::interval(), true);
+        REQUIRE(count == Test::leftBoundaryIntervals().size());
+
+        count = tree.countOverlappingIntervals(Test::interval(), false);
+        REQUIRE(0 == count);
+    }
+
+
+    SECTION("Right boundary intervals")
+    {
+        const auto tree = IntervalTree(Test::rightBoundaryIntervals());
+
+        auto count = tree.countOverlappingIntervals(Test::interval(), true);
+        REQUIRE(count == Test::rightBoundaryIntervals().size());
+
+        count = tree.countOverlappingIntervals(Test::interval(), false);
+        REQUIRE(0 == count);
+    }
+
+
     SECTION("Outer intervals")
     {
         const auto intervals = Test::outerIntervals();

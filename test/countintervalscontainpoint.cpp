@@ -29,18 +29,24 @@ TEST_CASE("Count intervals contain point")
     SECTION("Boundary interval left boundary point")
     {
         const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto count = tree.countIntervalsContainPoint(leftBoundaryPoint);
 
+        auto count = tree.countIntervalsContainPoint(leftBoundaryPoint, true);
         REQUIRE(count == Test::boundaryIntervals().size());
+
+        count = tree.countIntervalsContainPoint(leftBoundaryPoint, false);
+        REQUIRE(0 == count);
     }
 
 
     SECTION("Boundary interval right boundary point")
     {
         const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto count = tree.countIntervalsContainPoint(rightBoundaryPoint);
 
+        auto count = tree.countIntervalsContainPoint(rightBoundaryPoint, true);
         REQUIRE(count == Test::boundaryIntervals().size());
+
+        count = tree.countIntervalsContainPoint(rightBoundaryPoint, false);
+        REQUIRE(0 == count);
     }
 
 

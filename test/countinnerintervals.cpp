@@ -17,9 +17,12 @@ TEST_CASE("Count inner intervals")
     SECTION("Boundary interval")
     {
         const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
 
+        auto count = tree.countInnerIntervals(Test::interval(), true);
         REQUIRE(count == Test::boundaryIntervals().size());
+
+        count = tree.countInnerIntervals(Test::interval(), false);
+        REQUIRE(0 == count);
     }
 
 

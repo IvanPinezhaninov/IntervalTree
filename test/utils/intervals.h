@@ -22,6 +22,10 @@ IntervalVector rightOverlappingIntervals();
 
 IntervalVector boundaryIntervals();
 
+IntervalVector leftBoundaryIntervals();
+
+IntervalVector rightBoundaryIntervals();
+
 IntervalVector compositeIntervals(const IntervalVector &a, const IntervalVector &b);
 
 } // namespace Test

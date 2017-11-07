@@ -17,10 +17,13 @@ TEST_CASE("Find outer intervals")
     SECTION("Boundary interval")
     {
         const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
 
+        auto result = tree.findOuterIntervals(Test::interval(), true);
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        result = tree.findOuterIntervals(Test::interval(), false);
+        REQUIRE(result.empty());
     }
 
 

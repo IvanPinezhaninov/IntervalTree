@@ -353,132 +353,132 @@ public:
     }
 
 
-    void findOverlappingIntervals(const Interval &interval, Intervals &out) const
+    void findOverlappingIntervals(const Interval &interval, Intervals &out, bool boundary = true) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeOverlappingIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    Intervals findOverlappingIntervals(const Interval &interval) const
+    Intervals findOverlappingIntervals(const Interval &interval, bool boundary = true) const
     {
         Intervals out;
         out.reserve(m_size * VECTOR_RESERVE_RATE);
-        findOverlappingIntervals(interval, out);
+        findOverlappingIntervals(interval, out, boundary);
         return out;
     }
 
 
-    void findInnerIntervals(const Interval &interval, Intervals &out) const
+    void findInnerIntervals(const Interval &interval, Intervals &out, bool boundary = true) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeInnerIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    Intervals findInnerIntervals(const Interval &interval) const
+    Intervals findInnerIntervals(const Interval &interval, bool boundary = true) const
     {
         Intervals out;
         out.reserve(m_size * VECTOR_RESERVE_RATE);
-        findInnerIntervals(interval, out);
+        findInnerIntervals(interval, out, boundary);
         return out;
     }
 
 
-    void findOuterIntervals(const Interval &interval, Intervals &out) const
+    void findOuterIntervals(const Interval &interval, Intervals &out, bool boundary = true) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeOuterIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    Intervals findOuterIntervals(const Interval &interval) const
+    Intervals findOuterIntervals(const Interval &interval, bool boundary = true) const
     {
         Intervals out;
         out.reserve(m_size * VECTOR_RESERVE_RATE);
-        findOuterIntervals(interval, out);
+        findOuterIntervals(interval, out, boundary);
         return out;
     }
 
 
-    void findIntervalsContainPoint(const IntervalType &point, Intervals &out) const
+    void findIntervalsContainPoint(const IntervalType &point, Intervals &out, bool boundary = true) const
     {
         if (!out.empty()) {
             out.clear();
         }
 
         if (m_root != m_nill) {
-            subtreeIntervalsContainPoint(m_root, point, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeIntervalsContainPoint(m_root, point, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
     }
 
 
-    Intervals findIntervalsContainPoint(const IntervalType &point) const
+    Intervals findIntervalsContainPoint(const IntervalType &point, bool boundary = true) const
     {
         Intervals out;
         out.reserve(m_size * VECTOR_RESERVE_RATE);
-        findIntervalsContainPoint(point, out);
+        findIntervalsContainPoint(point, out, boundary);
         return out;
     }
 
 
-    size_type countOverlappingIntervals(const Interval &interval) const
+    size_type countOverlappingIntervals(const Interval &interval, bool boundary = true) const
     {
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, [&count] (const Interval &) -> void { ++count; });
+            subtreeOverlappingIntervals(m_root, interval, boundary, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
     }
 
 
-    size_type countInnerIntervals(const Interval &interval) const
+    size_type countInnerIntervals(const Interval &interval, bool boundary = true) const
     {
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, [&count] (const Interval &) -> void { ++count; });
+            subtreeInnerIntervals(m_root, interval, boundary, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
     }
 
 
-    size_type countOuterIntervals(const Interval &interval) const
+    size_type countOuterIntervals(const Interval &interval, bool boundary = true) const
     {
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, [&count] (const Interval &) -> void { ++count; });
+            subtreeOuterIntervals(m_root, interval, boundary, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
     }
 
 
-    size_type countIntervalsContainPoint(const IntervalType &point) const
+    size_type countIntervalsContainPoint(const IntervalType &point, bool boundary = true) const
     {
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeIntervalsContainPoint(m_root, point, [&count] (const Interval &) -> void { ++count; });
+            subtreeIntervalsContainPoint(m_root, point, boundary, [&count] (const Interval &) -> void { ++count; });
         }
 
         return count;
@@ -726,67 +726,7 @@ private:
 
 
     template <typename Callback>
-    void subtreeOverlappingIntervals(Node *node, const Interval &interval, Callback &&callback) const
-    {
-        assert(nullptr != node);
-
-        if (node == m_nill) {
-            return;
-        }
-
-        if (node->left != m_nill && !(node->left->highest < interval.low)) {
-            subtreeOverlappingIntervals(node->left, interval, std::forward<Callback>(callback));
-        }
-
-        if (!(interval.high < node->intervals.front().low) && !(node->high < interval.low)) {
-            for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
-                if (!(it->high < interval.low)) {
-                    callback(*it);
-                } else {
-                    break;
-                }
-            }
-        }
-
-        if (node->right != m_nill
-                && !(node->right->highest < interval.low)
-                && !(interval.high < node->right->lowest)) {
-            subtreeOverlappingIntervals(node->right, interval, std::forward<Callback>(callback));
-        }
-    }
-
-
-    template <typename Callback>
-    void subtreeInnerIntervals(Node *node, const Interval &interval, Callback &&callback) const
-    {
-        assert(nullptr != node);
-
-        if (node == m_nill) {
-            return;
-        }
-
-        if (!(node->intervals.front().low < interval.low)) {
-            if (node->left != m_nill && !(node->left->highest < interval.low)) {
-                subtreeInnerIntervals(node->left, interval, std::forward<Callback>(callback));
-            }
-
-            for (auto it = node->intervals.begin(); it != node->intervals.end(); ++it) {
-                if (!(interval.high < it->high)) {
-                    callback(*it);
-                } else {
-                    break;
-                }
-            }
-        }
-
-        if (node->right != m_nill && !(interval.high < node->right->lowest)) {
-            subtreeInnerIntervals(node->right, interval, std::forward<Callback>(callback));
-        }
-    }
-
-
-    template <typename Callback>
-    void subtreeOuterIntervals(Node *node, const Interval &interval, Callback &&callback) const
+    void subtreeOverlappingIntervals(Node *node, const Interval &interval, bool boundary, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -795,31 +735,29 @@ private:
         }
 
         if (node->left != m_nill
-                && !(interval.low < node->left->lowest)
-                && !(node->left->highest < interval.high)) {
-            subtreeOuterIntervals(node->left, interval, std::forward<Callback>(callback));
+                && boundary ? !(node->left->highest < interval.low) : interval.low < node->left->highest) {
+            subtreeOverlappingIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
         }
 
-        if (!(interval.low < node->intervals.front().low)) {
+        if (boundary ? !(interval.high < node->intervals.front().low) : node->intervals.front().low < interval.high) {
             for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
-                if (!(it->high < interval.high)) {
+                if (boundary ? !(it->high < interval.low) : interval.low < it->high) {
                     callback(*it);
                 } else {
                     break;
                 }
             }
+        }
 
-            if (node->right != m_nill
-                    && !(interval.low < node->right->lowest)
-                    && !(node->right->highest < interval.high)) {
-                subtreeOuterIntervals(node->right, interval, std::forward<Callback>(callback));
-            }
+        if (node->right != m_nill
+                && boundary ? !(interval.high < node->right->lowest) : node->right->lowest < interval.high) {
+            subtreeOverlappingIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
         }
     }
 
 
     template <typename Callback>
-    void subtreeIntervalsContainPoint(Node *node, const IntervalType &point, Callback &&callback) const
+    void subtreeInnerIntervals(Node *node, const Interval &interval, bool boundary, Callback &&callback) const
     {
         assert(nullptr != node);
 
@@ -827,14 +765,77 @@ private:
             return;
         }
 
-        if (node->left != m_nill && !(node->left->highest < point)) {
-            subtreeIntervalsContainPoint(node->left, point, std::forward<Callback>(callback));
+        if (boundary ? !(node->intervals.front().low < interval.low) : interval.low < node->intervals.front().low) {
+            if (node->left != m_nill
+                    && boundary ? !(node->left->highest < interval.low) : interval.low < node->left->highest) {
+                subtreeInnerIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
+            }
+
+            for (auto it = node->intervals.begin(); it != node->intervals.end(); ++it) {
+                if (boundary ? !(interval.high < it->high) : it->high < interval.high) {
+                    callback(*it);
+                } else {
+                    break;
+                }
+            }
         }
 
-        if (!(point < node->intervals.front().low)) {
+        if (node->right != m_nill
+                && boundary ? !(interval.high < node->right->lowest) : node->right->lowest < interval.high) {
+            subtreeInnerIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
+        }
+    }
+
+
+    template <typename Callback>
+    void subtreeOuterIntervals(Node *node, const Interval &interval, bool boundary, Callback &&callback) const
+    {
+        assert(nullptr != node);
+
+        if (node == m_nill) {
+            return;
+        }
+
+        if (node->left != m_nill
+                && boundary ? !(node->left->highest < interval.high) : interval.high < node->left->highest) {
+            subtreeOuterIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
+        }
+
+        if (boundary ? !(interval.low < node->intervals.front().low) : node->intervals.front().low < interval.low) {
+            for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
+                if (boundary ? !(it->high < interval.high) : interval.high < it->high) {
+                    callback(*it);
+                } else {
+                    break;
+                }
+            }
+
+            if (node->right != m_nill
+                    && boundary ? !(interval.low < node->right->lowest) : node->right->lowest < interval.low) {
+                subtreeOuterIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
+            }
+        }
+    }
+
+
+    template <typename Callback>
+    void subtreeIntervalsContainPoint(Node *node, const IntervalType &point, bool boundary, Callback &&callback) const
+    {
+        assert(nullptr != node);
+
+        if (node == m_nill) {
+            return;
+        }
+
+        if (node->left != m_nill
+                && boundary ? !(node->left->highest < point) : point < node->left->highest) {
+            subtreeIntervalsContainPoint(node->left, point, boundary, std::forward<Callback>(callback));
+        }
+
+        if (boundary ? !(point < node->intervals.front().low) : node->intervals.front().low < point) {
             if (!(node->high < point)) {
                 for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
-                    if (!(it->high < point)) {
+                    if (boundary ? !(it->high < point) : point < it->high) {
                         callback(*it);
                     } else {
                         break;
@@ -842,8 +843,9 @@ private:
                 }
             }
 
-            if (node->right != m_nill && !(node->right->highest < point)) {
-                subtreeIntervalsContainPoint(node->right, point, std::forward<Callback>(callback));
+            if (node->right != m_nill
+                    && boundary ? !(node->right->highest < point) : point < node->right->highest) {
+                subtreeIntervalsContainPoint(node->right, point, boundary, std::forward<Callback>(callback));
             }
         }
     }
