@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstddef>
 #include <ostream>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -348,7 +349,7 @@ public:
     Intervals findOverlappingIntervals(const Interval &interval, bool boundary = true) const
     {
         Intervals out;
-        out.reserve(m_size * VECTOR_RESERVE_RATE);
+        out.reserve(size_t(m_size * VECTOR_RESERVE_RATE));
         findOverlappingIntervals(interval, out, boundary);
         return out;
     }
@@ -369,7 +370,7 @@ public:
     Intervals findInnerIntervals(const Interval &interval, bool boundary = true) const
     {
         Intervals out;
-        out.reserve(m_size * VECTOR_RESERVE_RATE);
+        out.reserve(size_t(m_size * VECTOR_RESERVE_RATE));
         findInnerIntervals(interval, out, boundary);
         return out;
     }
@@ -390,7 +391,7 @@ public:
     Intervals findOuterIntervals(const Interval &interval, bool boundary = true) const
     {
         Intervals out;
-        out.reserve(m_size * VECTOR_RESERVE_RATE);
+        out.reserve(size_t(m_size * VECTOR_RESERVE_RATE));
         findOuterIntervals(interval, out, boundary);
         return out;
     }
@@ -411,7 +412,7 @@ public:
     Intervals findIntervalsContainPoint(const IntervalType &point, bool boundary = true) const
     {
         Intervals out;
-        out.reserve(m_size * VECTOR_RESERVE_RATE);
+        out.reserve(size_t(m_size * VECTOR_RESERVE_RATE));
         findIntervalsContainPoint(point, out, boundary);
         return out;
     }

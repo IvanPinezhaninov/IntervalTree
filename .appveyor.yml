@@ -1,0 +1,44 @@
+image: Visual Studio 2017
+
+branches:
+  only:
+    - master
+
+init:
+  - git config --global core.autocrlf input
+  - cmake --version
+  - msbuild /version
+  
+clone_folder: c:\projects\intervaltree
+shallow_clone: true
+
+platform:
+  - x64 
+  - Win32
+
+configuration:
+  - Debug
+  - Release
+  
+environment:
+  matrix:
+    - CMAKE_GENERATOR_NAME: Visual Studio 15 2017 Win64
+    - CMAKE_GENERATOR_NAME: Visual Studio 15 2017
+
+matrix:
+  exclude:
+    - platform: x64
+      environment: Visual Studio 15 2017
+    - platform: Win32
+      environment: Visual Studio 15 2017 Win64
+    
+install:
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %PLATFORM%
+    
+build_script:
+  - md build
+  - cd .\build
+  - cmake .. -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%CONFIGURATION%
+  - cmake --build . --config %CONFIGURATION%
+  - cd .\test\%CONFIGURATION%
+  - IntervalTreeTest.exe --rng-seed time

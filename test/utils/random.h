@@ -6,7 +6,7 @@
 
 namespace Random {
 
-void setRndGeneratorSeed(uint64_t seed);
+void setRndGeneratorSeed(unsigned int seed);
 
 Interval createInterval();
 

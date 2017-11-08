@@ -33,17 +33,15 @@ TEST_CASE("Intervals with the same boundaries and different values")
 int main(int argc, char* argv[]) {
     Catch::Session session;
 
-    const int res = session.applyCommandLine(argc, argv);
+    const auto res = session.applyCommandLine(argc, argv);
     if (0 != res) {
         return res;
     }
 
-    uint64_t seed = session.config().rngSeed();
-    if (0 == seed) {
-        seed = Catch::getCurrentNanosecondsSinceEpoch();
+    const auto seed = session.config().rngSeed();
+    if (0 != seed) {
+        Random::setRndGeneratorSeed(seed);
     }
-
-    Random::setRndGeneratorSeed(seed);
 
     return session.run(argc, argv);
 }

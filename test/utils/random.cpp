@@ -1,5 +1,6 @@
 #include "random.h"
 
+#include <ctime>
 #include <random>
 
 
@@ -8,10 +9,10 @@ static const size_t MAX_VALUE = 1000000;
 static const size_t MIN_RANGE = 1;
 static const size_t MAX_RANGE = 1000;
 
-static std::mt19937 gen;
+static std::mt19937 gen(static_cast<unsigned long>(time(0)));
 
 
-void Random::setRndGeneratorSeed(uint64_t seed)
+void Random::setRndGeneratorSeed(unsigned int seed)
 {
     gen.seed(seed);
 }
