@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(CatchBuilder CXX)
+project(Catch CXX)
 
 include(ExternalProject)
 find_package(Git REQUIRED)
 
+set(EXTERNAL_PROJECT_NAME CatchProject)
+
 ExternalProject_Add(
-    Catch
+    ${EXTERNAL_PROJECT_NAME}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}
     GIT_REPOSITORY https://github.com/catchorg/Catch2
     TIMEOUT 10
@@ -17,6 +19,7 @@ ExternalProject_Add(
     LOG_DOWNLOAD ON
 )
 
-# Expose required variable (CATCH_INCLUDE_DIR) to parent scope
-ExternalProject_Get_Property(Catch SOURCE_DIR)
-set(CATCH_INCLUDE_DIR ${SOURCE_DIR}/single_include CACHE INTERNAL "Path to Catch include dir")
+ExternalProject_Get_Property(${EXTERNAL_PROJECT_NAME} SOURCE_DIR)
+
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE ${SOURCE_DIR}/single_include)
