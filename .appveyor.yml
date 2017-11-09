@@ -38,7 +38,7 @@ install:
 build_script:
   - md build
   - cd .\build
-  - cmake .. -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%CONFIGURATION%
+  - cmake .. -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DBUILD_TESTS=YES
   - cmake --build . --config %CONFIGURATION%
   - cd .\test\%CONFIGURATION%
-  - IntervalTreeTest.exe --rng-seed time
+  - .\Test.exe --rng-seed time

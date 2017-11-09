@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(IntervalTreeTest CXX)
+project(Test CXX)
 
 set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")
 
@@ -35,4 +35,4 @@ set(SOURCES
 )
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
-
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})

@@ -37,7 +37,7 @@ install:
 script:
   - mkdir build
   - cd ./build
-  - cmake ..
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DBUILD_TESTS=YES
   - make
   - cd ./test
-  - ./IntervalTreeTest --rng-seed time
+  - ./Test --rng-seed time
