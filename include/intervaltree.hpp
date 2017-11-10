@@ -716,7 +716,7 @@ private:
         }
 
         if (node->left != m_nill
-                && boundary ? !(node->left->highest < interval.low) : interval.low < node->left->highest) {
+                && (boundary ? !(node->left->highest < interval.low) : interval.low < node->left->highest)) {
             subtreeOverlappingIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
         }
 
@@ -728,10 +728,7 @@ private:
                     break;
                 }
             }
-        }
 
-        if (node->right != m_nill
-                && boundary ? !(interval.high < node->right->lowest) : node->right->lowest < interval.high) {
             subtreeOverlappingIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
         }
     }
@@ -747,11 +744,7 @@ private:
         }
 
         if (boundary ? !(node->intervals.front().low < interval.low) : interval.low < node->intervals.front().low) {
-            if (node->left != m_nill
-                    && boundary ? !(node->left->highest < interval.low) : interval.low < node->left->highest) {
-                subtreeInnerIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
-            }
-
+            subtreeInnerIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
             for (auto it = node->intervals.begin(); it != node->intervals.end(); ++it) {
                 if (boundary ? !(interval.high < it->high) : it->high < interval.high) {
                     callback(*it);
@@ -762,7 +755,7 @@ private:
         }
 
         if (node->right != m_nill
-                && boundary ? !(interval.high < node->right->lowest) : node->right->lowest < interval.high) {
+                && (boundary ? !(interval.high < node->right->lowest) : node->right->lowest < interval.high)) {
             subtreeInnerIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
         }
     }
@@ -778,7 +771,7 @@ private:
         }
 
         if (node->left != m_nill
-                && boundary ? !(node->left->highest < interval.high) : interval.high < node->left->highest) {
+                && (boundary ? !(node->left->highest < interval.high) : interval.high < node->left->highest)) {
             subtreeOuterIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
         }
 
@@ -791,10 +784,7 @@ private:
                 }
             }
 
-            if (node->right != m_nill
-                    && boundary ? !(interval.low < node->right->lowest) : node->right->lowest < interval.low) {
-                subtreeOuterIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
-            }
+            subtreeOuterIntervals(node->right, interval, boundary, std::forward<Callback>(callback));
         }
     }
 
@@ -809,25 +799,20 @@ private:
         }
 
         if (node->left != m_nill
-                && boundary ? !(node->left->highest < point) : point < node->left->highest) {
+                && (boundary ? !(node->left->highest < point) : point < node->left->highest)) {
             subtreeIntervalsContainPoint(node->left, point, boundary, std::forward<Callback>(callback));
         }
 
         if (boundary ? !(point < node->intervals.front().low) : node->intervals.front().low < point) {
-            if (!(node->high < point)) {
-                for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
-                    if (boundary ? !(it->high < point) : point < it->high) {
-                        callback(*it);
-                    } else {
-                        break;
-                    }
+            for (auto it = node->intervals.rbegin(); it != node->intervals.rend(); ++it) {
+                if (boundary ? !(it->high < point) : point < it->high) {
+                    callback(*it);
+                } else {
+                    break;
                 }
             }
 
-            if (node->right != m_nill
-                    && boundary ? !(node->right->highest < point) : point < node->right->highest) {
-                subtreeIntervalsContainPoint(node->right, point, boundary, std::forward<Callback>(callback));
-            }
+            subtreeIntervalsContainPoint(node->right, point, boundary, std::forward<Callback>(callback));
         }
     }
 
