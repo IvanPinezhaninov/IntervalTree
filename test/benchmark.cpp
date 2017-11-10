@@ -107,7 +107,7 @@ TEST_CASE("Benchmark")
         const Timer::Time &start = Timer::now();
 
         for (const Interval &interval : searchIntervals) {
-            tree.findOuterIntervals(interval);
+            tree.findOverlappingIntervals(interval);
         }
 
         Timer::printTimeElapsed(start, SIZE, "Tree:   Find overlapping intervals");
