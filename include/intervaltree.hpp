@@ -343,6 +343,8 @@ public:
         if (m_root != m_nill) {
             subtreeOverlappingIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
+
+        out.shrink_to_fit();
     }
 
 
@@ -364,6 +366,8 @@ public:
         if (m_root != m_nill) {
             subtreeInnerIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
+
+        out.shrink_to_fit();
     }
 
 
@@ -385,6 +389,8 @@ public:
         if (m_root != m_nill) {
             subtreeOuterIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
+
+        out.shrink_to_fit();
     }
 
 
@@ -406,6 +412,8 @@ public:
         if (m_root != m_nill) {
             subtreeIntervalsContainPoint(m_root, point, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
         }
+
+        out.shrink_to_fit();
     }
 
 
