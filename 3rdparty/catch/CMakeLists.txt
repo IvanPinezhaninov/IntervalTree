@@ -11,8 +11,8 @@ ExternalProject_Add(
     ${EXTERNAL_PROJECT_NAME}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}
     GIT_REPOSITORY https://github.com/catchorg/Catch2
+    GIT_TAG v2.2.3
     TIMEOUT 10
-    UPDATE_COMMAND ${GIT_EXECUTABLE} pull
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
