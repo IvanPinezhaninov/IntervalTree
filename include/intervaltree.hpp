@@ -1068,8 +1068,8 @@ private:
 };
 
 
-template <typename T, typename K>
-void swap(IntervalTree<T, K> &lhs, IntervalTree<T, K> &rhs)
+template <typename IntervalType, typename ValueType>
+void swap(IntervalTree<IntervalType, ValueType> &lhs, IntervalTree<IntervalType, ValueType> &rhs)
 {
     lhs.swap(rhs);
 }
@@ -1077,15 +1077,18 @@ void swap(IntervalTree<T, K> &lhs, IntervalTree<T, K> &rhs)
 } // namespace Intervals
 
 
-template <typename T, typename K>
-std::ostream &operator<<(std::ostream &out, const Intervals::Interval<T, K> &interval) {
-    out << "Interval(" << interval.low << ", " << interval.high << "): " << interval.value;
+template <typename IntervalType, typename ValueType>
+std::ostream &operator<<(std::ostream &out, const Intervals::Interval<IntervalType, ValueType> &interval) {
+    out << "Interval(" << interval.low << ", " << interval.high << ")";
+    if (interval.value != ValueType()) {
+        out << ": " << interval.value;
+    }
     return out;
 }
 
 
-template <typename T, typename K>
-std::ostream &operator<<(std::ostream &out, const Intervals::IntervalTree<T, K> &tree) {
+template <typename IntervalType, typename ValueType>
+std::ostream &operator<<(std::ostream &out, const Intervals::IntervalTree<IntervalType, ValueType> &tree) {
     out << "IntervalTree(" << tree.size() << ")";
     return out;
 }
