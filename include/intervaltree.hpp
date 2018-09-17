@@ -34,6 +34,10 @@ constexpr static const double VECTOR_RESERVE_RATE = 0.25;
 template <typename IntervalType, typename ValueType = size_t>
 struct Interval
 {
+    using NonConstIntervalType = typename std::remove_const<IntervalType>::type;
+    using NonConstValueType = typename std::remove_const<ValueType>::type;
+
+
     Interval(const IntervalType &a, const IntervalType &b, const ValueType &val) :
         low(std::min(a, b)),
         high(std::max(a, b)),
@@ -74,9 +78,9 @@ struct Interval
     }
 
 
-    IntervalType low;
-    IntervalType high;
-    ValueType value;
+    NonConstIntervalType low;
+    NonConstIntervalType high;
+    NonConstValueType value;
 };
 
 
@@ -511,6 +515,8 @@ private:
 
     struct Node
     {
+        using NonConstIntervalType = typename std::remove_const<IntervalType>::type;
+
         Node() = default;
 
         Node(const Interval &interval, Color col, Node *nill) :
@@ -530,9 +536,9 @@ private:
         Node *left = nullptr;
         Node *right = nullptr;
 
-        IntervalType high;
-        IntervalType lowest;
-        IntervalType highest;
+        NonConstIntervalType high;
+        NonConstIntervalType lowest;
+        NonConstIntervalType highest;
         Intervals intervals;
     };
 
@@ -1062,8 +1068,8 @@ private:
 };
 
 
-template <typename T>
-void swap(IntervalTree<T> &lhs, IntervalTree<T> &rhs)
+template <typename T, typename K>
+void swap(IntervalTree<T, K> &lhs, IntervalTree<T, K> &rhs)
 {
     lhs.swap(rhs);
 }

@@ -30,6 +30,31 @@ TEST_CASE("Intervals with the same boundaries and different values")
 }
 
 
+TEST_CASE("Const types")
+{
+    using Interval = Intervals::Interval<const int, const size_t>;
+    using IntervalTree = Intervals::IntervalTree<const int, const size_t>;
+    using IntervalVector = std::vector<Interval>;
+
+    IntervalVector intervals
+    {
+        { 100, 200 },
+        { 101, 201 }
+    };
+
+    IntervalTree intervalTree;
+
+    for (auto interval : intervals) {
+        REQUIRE(intervalTree.insert(interval));
+    }
+
+    auto treeIntervals = intervalTree.intervals();
+
+    REQUIRE_FALSE(treeIntervals.empty());
+    REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
+}
+
+
 int main(int argc, char* argv[]) {
     Catch::Session session;
 
