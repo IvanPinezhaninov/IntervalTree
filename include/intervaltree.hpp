@@ -58,7 +58,7 @@ struct Interval
     }
 
 
-    Interval(const std::tuple<IntervalType, IntervalType> &interval) :
+    explicit Interval(const std::tuple<IntervalType, IntervalType> &interval) :
         Interval(std::get<0>(interval), std::get<1>(interval), ValueType())
     {
     }
@@ -102,7 +102,7 @@ public:
 
 
     template <typename Container>
-    IntervalTree(const Container &intervals) :
+    explicit IntervalTree(const Container &intervals) :
         IntervalTree()
     {
         for (const Interval &interval : intervals) {
