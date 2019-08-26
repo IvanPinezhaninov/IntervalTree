@@ -37,7 +37,9 @@ TEST_CASE("Find inner intervals")
 
         auto result = tree.findInnerIntervals(Test::interval(), true);
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        auto boundaryIntervals = Test::boundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), boundaryIntervals.cbegin()));
 
         result = tree.findInnerIntervals(Test::interval(), false);
         REQUIRE(result.empty());
@@ -60,7 +62,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        auto boundaryIntervals = Test::boundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), boundaryIntervals.cbegin()));
     }
 
 
@@ -70,7 +74,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -92,7 +98,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -112,7 +120,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -132,7 +142,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -152,7 +164,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -172,7 +186,9 @@ TEST_CASE("Find inner intervals")
         const auto result = tree.findInnerIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 

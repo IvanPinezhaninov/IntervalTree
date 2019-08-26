@@ -37,7 +37,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        auto boundaryIntervals = Test::boundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), boundaryIntervals.cbegin()));
     }
 
 
@@ -47,7 +49,9 @@ TEST_CASE("Find overlapping intervals")
 
         auto result = tree.findOverlappingIntervals(Test::interval(), true);
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::leftBoundaryIntervals().cbegin()));
+
+        auto leftBoundaryIntervals = Test::leftBoundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), leftBoundaryIntervals.cbegin()));
 
         result = tree.findOverlappingIntervals(Test::interval(), false);
         REQUIRE(result.empty());
@@ -60,7 +64,9 @@ TEST_CASE("Find overlapping intervals")
 
         auto result = tree.findOverlappingIntervals(Test::interval(), true);
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::rightBoundaryIntervals().cbegin()));
+
+        auto rightBoundaryIntervals = Test::rightBoundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), rightBoundaryIntervals.cbegin()));
 
         result = tree.findOverlappingIntervals(Test::interval(), false);
         REQUIRE(result.empty());
@@ -73,7 +79,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::outerIntervals().cbegin()));
+
+        auto outerIntervals = Test::outerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), outerIntervals.cbegin()));
     }
 
 
@@ -94,7 +102,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -136,7 +146,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -156,7 +168,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -166,7 +180,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::leftOverlappingIntervals().cbegin()));
+
+        auto leftOverlappingIntervals = Test::leftOverlappingIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), leftOverlappingIntervals.cbegin()));
     }
 
 
@@ -187,7 +203,9 @@ TEST_CASE("Find overlapping intervals")
         const auto result = tree.findOverlappingIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::rightOverlappingIntervals().cbegin()));
+
+        auto rightOverlappingIntervals = Test::rightOverlappingIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), rightOverlappingIntervals.cbegin()));
     }
 
 

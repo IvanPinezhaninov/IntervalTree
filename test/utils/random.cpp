@@ -26,7 +26,7 @@ static const size_t MAX_VALUE = 1000000;
 static const size_t MIN_RANGE = 1;
 static const size_t MAX_RANGE = 1000;
 
-static std::mt19937 gen(static_cast<unsigned long>(time(0)));
+static std::mt19937 gen(static_cast<unsigned long>(time(nullptr)));
 
 
 void Random::setRndGeneratorSeed(unsigned int seed)
@@ -47,7 +47,7 @@ Interval Random::createInterval()
 {
   const int low = rand(MIN_VALUE, MAX_VALUE);
   const int high = rand(low + int(MIN_RANGE), low + int(MAX_RANGE));
-  return Interval(low, high);
+  return {low, high};
 }
 
 

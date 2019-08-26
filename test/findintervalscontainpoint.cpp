@@ -40,7 +40,9 @@ TEST_CASE("Find intervals contain point")
         const auto result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        auto boundaryIntervals = Test::boundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), boundaryIntervals.cbegin()));
     }
 
 
@@ -50,7 +52,9 @@ TEST_CASE("Find intervals contain point")
 
         auto result = tree.findIntervalsContainPoint(leftBoundaryPoint, true);
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        auto boundaryIntervals = Test::boundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), boundaryIntervals.cbegin()));
 
         result = tree.findIntervalsContainPoint(leftBoundaryPoint, false);
         REQUIRE(result.empty());
@@ -63,7 +67,9 @@ TEST_CASE("Find intervals contain point")
 
         auto result = tree.findIntervalsContainPoint(rightBoundaryPoint, true);
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::boundaryIntervals().cbegin()));
+
+        auto boundaryIntervals = Test::boundaryIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), boundaryIntervals.cbegin()));
 
         result = tree.findIntervalsContainPoint(rightBoundaryPoint, false);
         REQUIRE(result.empty());
@@ -119,7 +125,9 @@ TEST_CASE("Find intervals contain point")
         const auto result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -139,7 +147,9 @@ TEST_CASE("Find intervals contain point")
         const auto result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::innerIntervals().cbegin()));
+
+        auto innerIntervals = Test::innerIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), innerIntervals.cbegin()));
     }
 
 
@@ -149,7 +159,9 @@ TEST_CASE("Find intervals contain point")
         const auto result = tree.findIntervalsContainPoint(leftBoundaryPoint);
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::leftOverlappingIntervals().cbegin()));
+
+        auto leftOverlappingIntervals = Test::leftOverlappingIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), leftOverlappingIntervals.cbegin()));
     }
 
 
@@ -159,7 +171,9 @@ TEST_CASE("Find intervals contain point")
         const auto result = tree.findIntervalsContainPoint(rightBoundaryPoint);
 
         REQUIRE_FALSE(result.empty());
-        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), Test::rightOverlappingIntervals().cbegin()));
+
+        auto rightOverlappingIntervals = Test::rightOverlappingIntervals();
+        REQUIRE(std::is_permutation(result.cbegin(), result.cend(), rightOverlappingIntervals.cbegin()));
     }
 
 
