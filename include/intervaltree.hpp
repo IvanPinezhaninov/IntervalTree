@@ -38,7 +38,7 @@ struct Interval
     using NonConstValueType = typename std::remove_const<ValueType>::type;
 
 
-    Interval(const IntervalType &a, const IntervalType &b, const ValueType &val) :
+    Interval(const IntervalType &a, const IntervalType &b, const ValueType &val = ValueType{}) :
         low(std::min(a, b)),
         high(std::max(a, b)),
         value(val)
@@ -46,20 +46,8 @@ struct Interval
     }
 
 
-    Interval(const IntervalType &a, const IntervalType &b) :
-        Interval(a, b, ValueType())
-    {
-    }
-
-
-    Interval(const std::tuple<IntervalType, IntervalType> &interval, const ValueType &val) :
+    explicit Interval(const std::tuple<IntervalType, IntervalType> &interval, ValueType val = ValueType{}) :
         Interval(std::get<0>(interval), std::get<1>(interval), val)
-    {
-    }
-
-
-    explicit Interval(const std::tuple<IntervalType, IntervalType> &interval) :
-        Interval(std::get<0>(interval), std::get<1>(interval), ValueType())
     {
     }
 
@@ -95,28 +83,27 @@ public:
 
     IntervalTree() :
         m_nill(new Node()),
-        m_root(m_nill),
-        m_size(0)
+        m_root(m_nill)
     {
     }
 
 
     template <typename Container>
-    explicit IntervalTree(const Container &intervals) :
+    explicit IntervalTree(Container intervals) :
         IntervalTree()
     {
-        for (const Interval &interval : intervals) {
-            insert(interval);
+        for (auto &interval : intervals) {
+            insert(std::move(interval));
         }
     }
 
 
     template <typename ForwardIterator>
-    IntervalTree(ForwardIterator begin, ForwardIterator end) :
+    IntervalTree(ForwardIterator begin, const ForwardIterator &end) :
         IntervalTree()
     {
         while (begin != end) {
-            insert(*begin);
+            insert(std::move(*begin));
             ++begin;
         }
     }
@@ -175,14 +162,14 @@ public:
     }
 
 
-    bool insert(const Interval &interval)
+    bool insert(Interval &&interval)
     {
         assert(nullptr != m_root && nullptr != m_nill);
 
         if (m_root == m_nill) {
             // Tree is empty
             assert(0 == m_size);
-            m_root = new Node(interval, Color::Black, m_nill);
+            m_root = new Node(std::move(interval), Color::Black, m_nill);
             m_size = 1;
             return true;
         }
@@ -191,18 +178,18 @@ public:
         assert(node != m_nill);
 
         if (interval.low < node->intervals.front().low) {
-            createChildNode(node, interval, Position::Left);
+            createChildNode(node, std::move(interval), Position::Left);
             return true;
-        } else if (node->intervals.front().low < interval.low) {
-            createChildNode(node, interval, Position::Right);
+        }
+
+        if (node->intervals.front().low < interval.low) {
+            createChildNode(node, std::move(interval), Position::Right);
             return true;
         }
 
         if (!isNodeHasInterval(node, interval)) {
             auto it = std::lower_bound(node->intervals.begin(), node->intervals.end(), interval,
                                        [] (const Interval &lhs, const Interval &rhs) -> bool { return (lhs.high < rhs.high); });
-
-            node->intervals.insert(it, interval);
 
             if (node->high < interval.high) {
                 node->high = interval.high;
@@ -213,12 +200,19 @@ public:
                 insertionFixNodeLimits(node);
             }
 
+            node->intervals.emplace(it, std::move(interval));
             ++m_size;
+
             return true;
         }
 
         // Value already exists
         return false;
+    }
+
+
+    bool insert(const Interval &interval) {
+        return insert(Interval(interval));
     }
 
 
@@ -519,16 +513,16 @@ private:
 
         Node() = default;
 
-        Node(const Interval &interval, Color col, Node *nill) :
+        Node(Interval interval, Color col, Node *nill) :
             color(col),
             parent(nill),
             left(nill),
             right(nill),
             high(interval.high),
             lowest(interval.low),
-            highest(interval.high)
+            highest(interval.high),
+            intervals({std::move(interval)})
         {
-            intervals.push_back(interval);
         }
 
         Color color = Color::Black;
@@ -536,9 +530,9 @@ private:
         Node *left = nullptr;
         Node *right = nullptr;
 
-        NonConstIntervalType high;
-        NonConstIntervalType lowest;
-        NonConstIntervalType highest;
+        NonConstIntervalType high{};
+        NonConstIntervalType lowest{};
+        NonConstIntervalType highest{};
         Intervals intervals;
     };
 
@@ -1064,7 +1058,7 @@ private:
 
     Node *m_nill;
     Node *m_root;
-    size_type m_size;
+    size_type m_size{0};
 };
 
 
@@ -1080,7 +1074,7 @@ void swap(IntervalTree<IntervalType, ValueType> &lhs, IntervalTree<IntervalType,
 template <typename IntervalType, typename ValueType>
 std::ostream &operator<<(std::ostream &out, const Intervals::Interval<IntervalType, ValueType> &interval) {
     out << "Interval(" << interval.low << ", " << interval.high << ")";
-    if (interval.value != ValueType()) {
+    if (interval.value != ValueType{}) {
         out << ": " << interval.value;
     }
     return out;
