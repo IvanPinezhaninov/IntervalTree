@@ -28,7 +28,7 @@ ExternalProject_Add(
     ${EXTERNAL_PROJECT_NAME}
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}
     GIT_REPOSITORY https://github.com/catchorg/Catch2
-    GIT_TAG v2.2.3
+    GIT_TAG v2.12.4
     TIMEOUT 10
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
@@ -40,6 +40,6 @@ ExternalProject_Get_Property(${EXTERNAL_PROJECT_NAME} SOURCE_DIR)
 
 add_library(${PROJECT_NAME} INTERFACE)
 
-target_include_directories(${PROJECT_NAME} INTERFACE ${SOURCE_DIR}/single_include)
+target_include_directories(${PROJECT_NAME} INTERFACE ${SOURCE_DIR}/single_include/catch2)
 
 add_dependencies(${PROJECT_NAME} ${EXTERNAL_PROJECT_NAME})
