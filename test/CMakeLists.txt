@@ -1,6 +1,6 @@
 #============================================================================
 #
-# Copyright (C) 2019 Ivan Pinezhaninov <ivan.pinezhaninov@gmail.com>
+# Copyright (C) 2020 Ivan Pinezhaninov <ivan.pinezhaninov@gmail.com>
 #
 # This file is part of the IntervalTree - Red-Black balanced interval tree
 # which can be found at https://github.com/IvanPinezhaninov/IntervalTree/.
