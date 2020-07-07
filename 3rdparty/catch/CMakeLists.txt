@@ -39,4 +39,7 @@ ExternalProject_Add(
 ExternalProject_Get_Property(${EXTERNAL_PROJECT_NAME} SOURCE_DIR)
 
 add_library(${PROJECT_NAME} INTERFACE)
+
 target_include_directories(${PROJECT_NAME} INTERFACE ${SOURCE_DIR}/single_include)
+
+add_dependencies(${PROJECT_NAME} ${EXTERNAL_PROJECT_NAME})

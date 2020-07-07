@@ -49,6 +49,6 @@ set(SOURCES
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} IntervalTree Catch)
+target_link_libraries(${PROJECT_NAME} PRIVATE IntervalTree Catch)
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
