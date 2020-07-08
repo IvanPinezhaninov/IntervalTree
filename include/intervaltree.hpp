@@ -34,20 +34,20 @@ constexpr static const double VECTOR_RESERVE_RATE = 0.25;
 template <typename IntervalType, typename ValueType = size_t>
 struct Interval
 {
-    using NonConstIntervalType = typename std::remove_const<IntervalType>::type;
-    using NonConstValueType = typename std::remove_const<ValueType>::type;
+    using interval_type = typename std::decay<IntervalType>::type;
+    using value_type = typename std::decay<ValueType>::type;
 
 
-    Interval(const IntervalType &a, const IntervalType &b, const ValueType &val = ValueType{}) :
-        low(std::min(a, b)),
-        high(std::max(a, b)),
-        value(val)
+    Interval(IntervalType a, IntervalType b, ValueType val = ValueType{}) :
+        low(std::move(a < b ? a : b)),
+        high(std::move(b < a ? a : b)),
+        value(std::move(val))
     {
     }
 
 
     explicit Interval(const std::tuple<IntervalType, IntervalType> &interval, ValueType val = ValueType{}) :
-        Interval(std::get<0>(interval), std::get<1>(interval), val)
+        Interval(std::get<0>(interval), std::get<1>(interval), std::move(val))
     {
     }
 
@@ -66,9 +66,9 @@ struct Interval
     }
 
 
-    NonConstIntervalType low;
-    NonConstIntervalType high;
-    NonConstValueType value;
+    interval_type low;
+    interval_type high;
+    value_type value;
 };
 
 
