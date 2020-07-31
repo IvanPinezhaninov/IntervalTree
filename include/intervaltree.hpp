@@ -38,18 +38,27 @@ struct Interval
     using value_type = typename std::decay<ValueType>::type;
 
 
-    Interval(IntervalType a, IntervalType b, ValueType val = ValueType{}) :
-        low(std::move(a < b ? a : b)),
-        high(std::move(b < a ? a : b)),
-        value(std::move(val))
+    template <typename I, typename V = ValueType>
+    Interval(I &&a, I &&b, V &&val = {}) :
+        low(std::forward<I>(a < b ? a : b)),
+        high(std::forward<I>(b < a ? a : b)),
+        value(std::forward<V>(val))
     {
     }
 
 
-    explicit Interval(const std::tuple<IntervalType, IntervalType> &interval, ValueType val = ValueType{}) :
-        Interval(std::get<0>(interval), std::get<1>(interval), std::move(val))
+    template <typename V = ValueType>
+    explicit Interval(const std::tuple<IntervalType, IntervalType> &interval, V &&val = {}) :
+        Interval(std::get<0>(interval), std::get<1>(interval), std::forward<V>(val))
     {
     }
+
+
+    Interval(const Interval &) = default;
+    Interval(Interval &&) = default;
+    Interval &operator=(const Interval &) = default;
+    Interval &operator=(Interval &&) = default;
+    virtual ~Interval() = default;
 
 
     bool operator==(const Interval &other) const
@@ -89,11 +98,11 @@ public:
 
 
     template <typename Container>
-    explicit IntervalTree(Container intervals) :
+    explicit IntervalTree(const Container &intervals) :
         IntervalTree()
     {
-        for (auto &interval : intervals) {
-            insert(std::move(interval));
+        for (const auto &interval : intervals) {
+            insert(interval);
         }
     }
 
@@ -103,7 +112,7 @@ public:
         IntervalTree()
     {
         while (begin != end) {
-            insert(std::move(*begin));
+            insert(*begin);
             ++begin;
         }
     }
@@ -162,7 +171,7 @@ public:
     }
 
 
-    bool insert(Interval &&interval)
+    bool insert(Interval interval)
     {
         assert(nullptr != m_root && nullptr != m_nill);
 
@@ -188,8 +197,7 @@ public:
         }
 
         if (!isNodeHasInterval(node, interval)) {
-            auto it = std::lower_bound(node->intervals.begin(), node->intervals.end(), interval,
-                                       [] (const Interval &lhs, const Interval &rhs) -> bool { return (lhs.high < rhs.high); });
+            auto it = std::lower_bound(node->intervals.begin(), node->intervals.end(), interval, HighComparator());
 
             if (node->high < interval.high) {
                 node->high = interval.high;
@@ -211,11 +219,6 @@ public:
     }
 
 
-    bool insert(const Interval &interval) {
-        return insert(Interval(interval));
-    }
-
-
     bool remove(const Interval &interval)
     {
         assert(nullptr != m_root && nullptr != m_nill);
@@ -226,20 +229,20 @@ public:
             return false;
         }
 
-        Node *node = findNode(m_root, interval);
+        auto node = findNode(m_root, interval);
         assert(node != m_nill);
 
         auto it = std::find(node->intervals.begin(), node->intervals.end(), interval);
         if (it != node->intervals.cend()) {
             node->intervals.erase(it);
             if (isNodeAboutToBeDestroyed(node)) {
-                Node *child = m_nill;
+                auto child = m_nill;
                 if (node->right == m_nill) {
                     child = node->left;
                 } else if (node->left == m_nill) {
                     child = node->right;
                 } else {
-                    Node *nextValueNode = node->right;
+                    auto nextValueNode = node->right;
                     while (nextValueNode->left != m_nill) {
                         nextValueNode = nextValueNode->left;
                     }
@@ -312,7 +315,7 @@ public:
             return false;
         }
 
-        Node *node = findNode(m_root, interval);
+        auto node = findNode(m_root, interval);
         assert(node != m_nill);
 
         return isNodeHasInterval(node, interval);
@@ -507,9 +510,20 @@ private:
     };
 
 
+    struct HighComparator final
+    {
+      public:
+        template<typename T>
+        bool operator()(const T &lhs, const T &rhs) const
+        {
+          return (lhs.high < rhs.high);
+        }
+    };
+
+
     struct Node
     {
-        using NonConstIntervalType = typename std::remove_const<IntervalType>::type;
+        using interval_type = typename Interval::interval_type;
 
         Node() = default;
 
@@ -520,9 +534,9 @@ private:
             right(nill),
             high(interval.high),
             lowest(interval.low),
-            highest(interval.high),
-            intervals({std::move(interval)})
+            highest(interval.high)
         {
+            intervals.emplace_back(std::move(interval));
         }
 
         Color color = Color::Black;
@@ -530,9 +544,9 @@ private:
         Node *left = nullptr;
         Node *right = nullptr;
 
-        NonConstIntervalType high{};
-        NonConstIntervalType lowest{};
-        NonConstIntervalType highest{};
+        interval_type high{};
+        interval_type lowest{};
+        interval_type highest{};
         Intervals intervals;
     };
 
@@ -545,7 +559,7 @@ private:
             return m_nill;
         }
 
-        Node *node = new Node();
+        auto node = new Node();
         node->intervals = otherNode->intervals;
         node->high = otherNode->high;
         node->lowest = otherNode->lowest;
@@ -579,7 +593,7 @@ private:
         assert(nullptr != node);
         assert(node != m_nill);
 
-        Node *child = m_nill;
+        auto child = m_nill;
         if (interval.low < node->intervals.front().low) {
             child = childNode(node, Position::Left);
         } else if (node->intervals.front().low < interval.low) {
@@ -649,12 +663,12 @@ private:
     }
 
 
-    void createChildNode(Node *parent, const Interval &interval, Position position)
+    void createChildNode(Node *parent, Interval interval, Position position)
     {
         assert(nullptr != parent);
         assert(childNode(parent, position) == m_nill);
 
-        Node *child = new Node(interval, Color::Red, m_nill);
+        auto child = new Node(std::move(interval), Color::Red, m_nill);
         setChildNode(parent, child, position);
         insertionFixNodeLimits(child);
         insertionFix(child);
@@ -673,16 +687,16 @@ private:
     {
         assert(nullptr != node);
 
-        Node *left = isNodeAboutToBeDestroyed(node->left) ? m_nill : node->left;
-        Node *right = isNodeAboutToBeDestroyed(node->right) ? m_nill : node->right;
+        auto left = isNodeAboutToBeDestroyed(node->left) ? m_nill : node->left;
+        auto right = isNodeAboutToBeDestroyed(node->right) ? m_nill : node->right;
 
-        const IntervalType &lowest = (left != m_nill) ? left->lowest : node->intervals.front().low;
+        const auto &lowest = (left != m_nill) ? left->lowest : node->intervals.front().low;
 
         if (isNotEqual(node->lowest, lowest)) {
             node->lowest = lowest;
         }
 
-        const IntervalType &highest = std::max({ left->highest, right->highest, node->high });
+        const auto &highest = std::max({ left->highest, right->highest, node->high });
 
         if (isNotEqual(node->highest, highest)) {
             node->highest = highest;
@@ -837,8 +851,7 @@ private:
     {
         assert(!intervals.empty());
 
-        auto it = std::max_element(intervals.cbegin(), intervals.cend(),
-                                   [] (const Interval &lhs, const Interval &rhs) -> bool { return lhs.high < rhs.high; });
+        auto it = std::max_element(intervals.cbegin(), intervals.cend(), HighComparator());
 
         assert(it != intervals.cend());
 
@@ -896,7 +909,7 @@ private:
     {
         assert(nullptr != node && nullptr != node->right);
 
-        Node *child = node->right;
+        auto child = node->right;
         swapRelations(node, child);
         setChildNode(node, child->left, Position::Right);
         setChildNode(child, node, Position::Left);
@@ -910,7 +923,7 @@ private:
     {
         assert(nullptr != node && nullptr != node->left);
 
-        Node *child = node->left;
+        auto child = node->left;
         swapRelations(node, child);
         setChildNode(node, child->right, Position::Left);
         setChildNode(child, node, Position::Right);
@@ -941,7 +954,7 @@ private:
         assert(nullptr != node && nullptr != node->parent);
 
         while (node->parent != m_nill) {
-            bool finish = true;
+            auto finish = true;
 
             if (node->parent->highest < node->highest) {
                 node->parent->highest = node->highest;
@@ -995,8 +1008,8 @@ private:
         assert(nullptr != node && nullptr != node->parent);
 
         while (Color::Red == node->color && Color::Red == node->parent->color) {
-            Node *parent = node->parent;
-            Node *uncle = siblingNode(parent);
+            auto parent = node->parent;
+            auto uncle = siblingNode(parent);
             switch (uncle->color) {
             case Color::Red:
                 uncle->color = Color::Black;
@@ -1027,7 +1040,7 @@ private:
         assert(nullptr != node && nullptr != node->parent);
 
         while (Color::Black == node->color && node->parent != m_nill) {
-            Node *sibling = siblingNode(node);
+            auto sibling = siblingNode(node);
             if (Color::Red == sibling->color) {
                 rotate(sibling);
                 sibling = siblingNode(node);
