@@ -77,3 +77,22 @@ int main()
     return 0;
 }
 ```
+
+## Build and test
+
+```bash
+git clone https://github.com/IvanPinezhaninov/IntervalTree.git
+cd IntervalTree
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=YES
+make -j4
+cd ./test
+./Test --rng-seed time
+```
+
+## License
+This code is distributed under the [MIT License](LICENSE)
+
+## Contacts
+Ivan Pinezhaninov, ivan.pinezhaninov@gmail.com
