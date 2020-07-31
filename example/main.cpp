@@ -26,16 +26,16 @@ int main()
     Intervals::IntervalTree<int> intervalTree;
 
     // Insert intervals to the tree
-    intervalTree.insert({ 20, 30 });
-    intervalTree.insert({ 40, 60 });
-    intervalTree.insert({ 70, 90 });
-    intervalTree.insert({ 60, 70 });
-    intervalTree.insert({ 40, 90 });
-    intervalTree.insert({ 80, 90 });
+    intervalTree.insert({20, 30});
+    intervalTree.insert({40, 60});
+    intervalTree.insert({70, 90});
+    intervalTree.insert({60, 70});
+    intervalTree.insert({40, 90});
+    intervalTree.insert({80, 90});
 
     // Wanted interval and point
-    const auto wantedInterval = Intervals::Interval<int>(50, 80);
-    const auto wantedPoint = 50;
+    auto wantedInterval = Intervals::Interval<int>(50, 80);
+    auto wantedPoint = 50;
 
     // Find intervals
     const auto &overlappingIntervals = intervalTree.findOverlappingIntervals(wantedInterval);
@@ -71,7 +71,7 @@ int main()
     }
     std::cout << std::endl;
 
-    // Print intervals contain a point
+    // Print intervals contain the point
     std::cout << "Intervals contain a point value of " << wantedPoint << ":" << std::endl;
     for (const auto &interval : intervalsContainPoint) {
         std::cout << interval << std::endl;
