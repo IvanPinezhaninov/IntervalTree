@@ -125,13 +125,13 @@ TEST_CASE("IntervalTree constructor for list container")
 {
     IntervalList intervals
     {
-        { 1, 2 },
-        { 3, 4 }
+        {1, 2},
+        {3, 4}
     };
 
     IntervalTree intervalTree(intervals);
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
@@ -142,13 +142,13 @@ TEST_CASE("IntervalTree constructor for set container")
 {
     IntervalSet intervals
     {
-        { 1, 2 },
-        { 3, 4 }
+        {1, 2},
+        {3, 4}
     };
 
     IntervalTree intervalTree(intervals);
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
@@ -159,13 +159,13 @@ TEST_CASE("IntervalTree constructor for vector container")
 {
     IntervalVector intervals
     {
-        { 1, 2 },
-        { 3, 4 }
+        {1, 2},
+        {3, 4}
     };
 
     IntervalTree intervalTree(intervals);
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
@@ -176,13 +176,13 @@ TEST_CASE("IntervalTree constructor for list container iterators")
 {
     IntervalList intervals
     {
-        { 1, 2 },
-        { 3, 4 }
+        {1, 2},
+        {3, 4}
     };
 
-    IntervalTree intervalTree(intervals.begin(), intervals.end());
+    IntervalTree intervalTree(intervals.cbegin(), intervals.cend());
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
@@ -193,13 +193,13 @@ TEST_CASE("IntervalTree constructor for set container iterators")
 {
     IntervalSet intervals
     {
-        { 1, 2 },
-        { 3, 4 }
+        {1, 2},
+        {3, 4}
     };
 
-    IntervalTree intervalTree(intervals.begin(), intervals.end());
+    IntervalTree intervalTree(intervals.cbegin(), intervals.cend());
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
@@ -210,13 +210,13 @@ TEST_CASE("IntervalTree constructor for vector container iterators")
 {
     IntervalVector intervals
     {
-        { 1, 2 },
-        { 3, 4 }
+        {1, 2},
+        {3, 4}
     };
 
     IntervalTree intervalTree(intervals.begin(), intervals.end());
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));

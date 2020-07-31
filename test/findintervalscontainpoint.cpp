@@ -27,7 +27,7 @@ TEST_CASE("Find intervals contain point")
     SECTION("Empty tree")
     {
         const IntervalTree tree;
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE(tree.isEmpty());
         REQUIRE(result.empty());
@@ -36,8 +36,8 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Boundary interval central point")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::boundaryIntervals());
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
 
@@ -48,7 +48,7 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Boundary interval left boundary point")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
+        IntervalTree tree(Test::boundaryIntervals());
 
         auto result = tree.findIntervalsContainPoint(leftBoundaryPoint, true);
         REQUIRE_FALSE(result.empty());
@@ -63,7 +63,7 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Boundary interval right boundary point")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
+        IntervalTree tree(Test::boundaryIntervals());
 
         auto result = tree.findIntervalsContainPoint(rightBoundaryPoint, true);
         REQUIRE_FALSE(result.empty());
@@ -78,9 +78,9 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Outer and boundary intervals central point")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
@@ -89,9 +89,9 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Outer and boundary intervals left boundary point")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findIntervalsContainPoint(leftBoundaryPoint);
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findIntervalsContainPoint(leftBoundaryPoint);
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
@@ -100,9 +100,9 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Outer and boundary intervals right boundary point")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findIntervalsContainPoint(rightBoundaryPoint);
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findIntervalsContainPoint(rightBoundaryPoint);
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
@@ -111,8 +111,8 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Left intervals")
     {
-        const auto tree = IntervalTree(Test::leftIntervals());
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::leftIntervals());
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE(result.empty());
     }
@@ -120,9 +120,9 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Left and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        const auto &intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
 
@@ -133,8 +133,8 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Right intervals")
     {
-        const auto tree = IntervalTree(Test::rightIntervals());
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::rightIntervals());
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE(result.empty());
     }
@@ -142,9 +142,9 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Right and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findIntervalsContainPoint(centralPoint);
+        const auto &intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(result.empty());
 
@@ -155,8 +155,8 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Left overlapping intervals and left boundary point")
     {
-        const auto tree = IntervalTree(Test::leftOverlappingIntervals());
-        const auto result = tree.findIntervalsContainPoint(leftBoundaryPoint);
+        IntervalTree tree(Test::leftOverlappingIntervals());
+        const auto &result = tree.findIntervalsContainPoint(leftBoundaryPoint);
 
         REQUIRE_FALSE(result.empty());
 
@@ -167,8 +167,8 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Right overlapping intervals and right boundary point")
     {
-        const auto tree = IntervalTree(Test::rightOverlappingIntervals());
-        const auto result = tree.findIntervalsContainPoint(rightBoundaryPoint);
+        IntervalTree tree(Test::rightOverlappingIntervals());
+        const auto &result = tree.findIntervalsContainPoint(rightBoundaryPoint);
 
         REQUIRE_FALSE(result.empty());
 
@@ -179,8 +179,8 @@ TEST_CASE("Find intervals contain point")
 
     SECTION("Intervals contain point order")
     {
-        const auto tree = IntervalTree(Test::innerIntervals());
-        const auto intervals = tree.findIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::innerIntervals());
+        const auto &intervals = tree.findIntervalsContainPoint(centralPoint);
 
         REQUIRE_FALSE(intervals.empty());
 

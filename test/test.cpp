@@ -40,7 +40,7 @@ TEST_CASE("Intervals with the same boundaries and different values")
         REQUIRE_FALSE(intervalTree.insert(interval));
     }
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
@@ -65,7 +65,7 @@ TEST_CASE("Const types")
         REQUIRE(intervalTree.insert(interval));
     }
 
-    auto treeIntervals = intervalTree.intervals();
+    const auto &treeIntervals = intervalTree.intervals();
 
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));

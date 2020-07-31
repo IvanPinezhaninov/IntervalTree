@@ -26,8 +26,8 @@ TEST_CASE("Count intervals contain point")
 {
     SECTION("Empty tree")
     {
-        const IntervalTree tree;
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        IntervalTree tree;
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(tree.isEmpty());
         REQUIRE(0 == count);
@@ -36,8 +36,8 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Boundary interval central point")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::boundaryIntervals());
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(count == Test::boundaryIntervals().size());
     }
@@ -45,7 +45,7 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Boundary interval left boundary point")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
+        IntervalTree tree(Test::boundaryIntervals());
 
         auto count = tree.countIntervalsContainPoint(leftBoundaryPoint, true);
         REQUIRE(count == Test::boundaryIntervals().size());
@@ -57,7 +57,7 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Boundary interval right boundary point")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
+        IntervalTree tree(Test::boundaryIntervals());
 
         auto count = tree.countIntervalsContainPoint(rightBoundaryPoint, true);
         REQUIRE(count == Test::boundaryIntervals().size());
@@ -69,9 +69,9 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Outer and boundary intervals central point")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(count == intervals.size());
     }
@@ -79,9 +79,9 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Outer and boundary intervals left boundary point")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countIntervalsContainPoint(leftBoundaryPoint);
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countIntervalsContainPoint(leftBoundaryPoint);
 
         REQUIRE(count == intervals.size());
     }
@@ -89,9 +89,9 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Outer and boundary intervals right boundary point")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countIntervalsContainPoint(rightBoundaryPoint);
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countIntervalsContainPoint(rightBoundaryPoint);
 
         REQUIRE(count == intervals.size());
     }
@@ -99,8 +99,8 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Left intervals")
     {
-        const auto tree = IntervalTree(Test::leftIntervals());
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::leftIntervals());
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(0 == count);
     }
@@ -108,9 +108,9 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Left and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        const auto &intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -118,8 +118,8 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Right intervals")
     {
-        const auto tree = IntervalTree(Test::rightIntervals());
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        IntervalTree tree(Test::rightIntervals());
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(0 == count);
     }
@@ -127,9 +127,9 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Right and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countIntervalsContainPoint(centralPoint);
+        const auto &intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countIntervalsContainPoint(centralPoint);
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -137,8 +137,8 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Left overlapping intervals and left boundary point")
     {
-        const auto tree = IntervalTree(Test::leftOverlappingIntervals());
-        const auto count = tree.countIntervalsContainPoint(leftBoundaryPoint);
+        IntervalTree tree(Test::leftOverlappingIntervals());
+        auto count = tree.countIntervalsContainPoint(leftBoundaryPoint);
 
         REQUIRE(count == Test::leftOverlappingIntervals().size());
     }
@@ -146,8 +146,8 @@ TEST_CASE("Count intervals contain point")
 
     SECTION("Right overlapping intervals and right boundary point")
     {
-        const auto tree = IntervalTree(Test::rightOverlappingIntervals());
-        const auto count = tree.countIntervalsContainPoint(rightBoundaryPoint);
+        IntervalTree tree(Test::rightOverlappingIntervals());
+        auto count = tree.countIntervalsContainPoint(rightBoundaryPoint);
 
         REQUIRE(count == Test::rightOverlappingIntervals().size());
     }

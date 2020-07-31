@@ -28,18 +28,18 @@ static const size_t SIZE = 1000;
 
 TEST_CASE("Benchmark")
 {
-    const IntervalVector &intervals = Random::createIntervals(SIZE);
-    const IntervalTree tree = IntervalTree(intervals);
-    const IntervalVector &searchIntervals = Random::createIntervals(SIZE);
+    const auto &searchIntervals = Random::createIntervals(SIZE);
+    const auto &intervals = Random::createIntervals(SIZE);
+    IntervalTree tree(intervals);
 
 
     // Vector: Insert intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
         IntervalVector insertingIntervals;
 
-        for (const Interval &interval : intervals) {
+        for (const auto &interval : intervals) {
             insertingIntervals.push_back(interval);
         }
 
@@ -51,9 +51,9 @@ TEST_CASE("Benchmark")
     {
         IntervalTree tree;
 
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &interval : intervals) {
+        for (const auto &interval : intervals) {
             tree.insert(interval);
         }
 
@@ -66,14 +66,14 @@ TEST_CASE("Benchmark")
 
     // Vector: Remove intervals
     {
-        IntervalVector removingIntervals = intervals;
+        auto removingIntervals = intervals;
 
-        auto rand = std::default_random_engine {};
+        auto rand = std::default_random_engine{};
         std::shuffle(removingIntervals.begin(), removingIntervals.end(), rand);
 
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &interval : intervals) {
+        for (const auto &interval : intervals) {
             auto it = std::find(removingIntervals.begin(), removingIntervals.end(), interval);
             assert(it != removingIntervals.cend());
             removingIntervals.erase(it);
@@ -85,11 +85,11 @@ TEST_CASE("Benchmark")
 
     // Tree: Remove intervals
     {
-        IntervalTree tree = IntervalTree(intervals);
+        IntervalTree tree(intervals);
 
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &interval : intervals) {
+        for (const auto &interval : intervals) {
             tree.remove(interval);
         }
 
@@ -102,18 +102,17 @@ TEST_CASE("Benchmark")
 
     // Vector: Find overlapping intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &searchInterval : searchIntervals) {
+        for (const auto &searchInterval : searchIntervals) {
             IntervalVector foundIntervals;
             foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
-            for (const Interval &interval : intervals) {
+            for (const auto &interval : intervals) {
                 if (searchInterval.low <= interval.high && interval.low <= searchInterval.high) {
                     foundIntervals.push_back(interval);
                 }
             }
         }
-
 
         Timer::printTimeElapsed(start, SIZE, "Vector: Find overlapping intervals");
     }
@@ -121,9 +120,9 @@ TEST_CASE("Benchmark")
 
     // Tree: Find overlapping intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &interval : searchIntervals) {
+        for (const auto &interval : searchIntervals) {
             tree.findOverlappingIntervals(interval);
         }
 
@@ -136,18 +135,17 @@ TEST_CASE("Benchmark")
 
     // Vector: Find inner intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &searchInterval : searchIntervals) {
+        for (const auto &searchInterval : searchIntervals) {
             IntervalVector foundIntervals;
             foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
-            for (const Interval &interval : intervals) {
+            for (const auto &interval : intervals) {
                 if (searchInterval.low <= interval.low && interval.high <= searchInterval.high) {
                     foundIntervals.push_back(interval);
                 }
             }
         }
-
 
         Timer::printTimeElapsed(start, SIZE, "Vector: Find inner intervals");
     }
@@ -155,9 +153,9 @@ TEST_CASE("Benchmark")
 
     // Tree: Find inner intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &interval : searchIntervals) {
+        for (const auto &interval : searchIntervals) {
             tree.findInnerIntervals(interval);
         }
 
@@ -170,12 +168,12 @@ TEST_CASE("Benchmark")
 
     // Vector: Find outer intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &searchInterval : searchIntervals) {
+        for (const auto &searchInterval : searchIntervals) {
             IntervalVector foundIntervals;
             foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
-            for (const Interval &interval : intervals) {
+            for (const auto &interval : intervals) {
                 if (interval.low <= searchInterval.low && searchInterval.high <= interval.high) {
                     foundIntervals.push_back(interval);
                 }
@@ -188,9 +186,9 @@ TEST_CASE("Benchmark")
 
     // Tree: Find outer intervals
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (const Interval &interval : searchIntervals) {
+        for (const auto &interval : searchIntervals) {
             tree.findOuterIntervals(interval);
         }
 
@@ -203,12 +201,12 @@ TEST_CASE("Benchmark")
 
     // Vector: Find intervals contain point
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (int i = 0; i < int(SIZE); ++i) {
+        for (auto i = 0; i < int(SIZE); ++i) {
             IntervalVector foundIntervals;
             foundIntervals.reserve(size_t(intervals.size() * Intervals::VECTOR_RESERVE_RATE));
-            for (const Interval &interval : intervals) {
+            for (const auto &interval : intervals) {
                 if (interval.low <= i && i <= interval.high) {
                     foundIntervals.push_back(interval);
                 }
@@ -221,9 +219,9 @@ TEST_CASE("Benchmark")
 
     // Tree: Find intervals contain point
     {
-        const Timer::Time &start = Timer::now();
+        auto start = Timer::now();
 
-        for (int i = 0; i < int(SIZE); ++i) {
+        for (auto i = 0; i < int(SIZE); ++i) {
             tree.findIntervalsContainPoint(i);
         }
 

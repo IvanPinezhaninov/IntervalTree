@@ -24,7 +24,7 @@ TEST_CASE("Find outer intervals")
     SECTION("Empty tree")
     {
         const IntervalTree tree;
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE(tree.isEmpty());
         REQUIRE(result.empty());
@@ -33,7 +33,7 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Boundary interval")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
+        IntervalTree tree(Test::boundaryIntervals());
 
         auto result = tree.findOuterIntervals(Test::interval(), true);
         REQUIRE_FALSE(result.empty());
@@ -48,8 +48,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Outer intervals")
     {
-        const auto tree = IntervalTree(Test::outerIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::outerIntervals());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -60,9 +60,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Outer and boundary intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
         REQUIRE(std::is_permutation(result.cbegin(), result.cend(), intervals.cbegin()));
@@ -71,8 +71,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Inner intervals")
     {
-        const auto tree = IntervalTree(Test::innerIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::innerIntervals());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
@@ -80,9 +80,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Inner and boundary intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::innerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::innerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -93,9 +93,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Outer and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -106,8 +106,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Left intervals")
     {
-        const auto tree = IntervalTree(Test::leftIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::leftIntervals());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
@@ -115,9 +115,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Left and outer intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::leftIntervals(), Test::outerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::leftIntervals(), Test::outerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -128,8 +128,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Right intervals")
     {
-        const auto tree = IntervalTree(Test::rightIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::rightIntervals());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
@@ -137,9 +137,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Right and outer intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::rightIntervals(), Test::outerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::rightIntervals(), Test::outerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -150,8 +150,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Left overlapping intervals")
     {
-        const auto tree = IntervalTree(Test::leftOverlappingIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::leftOverlappingIntervals());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
@@ -159,9 +159,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Left overlapping and outer intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::leftOverlappingIntervals(), Test::outerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::leftOverlappingIntervals(), Test::outerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -172,8 +172,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Right overlapping intervals")
     {
-        const auto tree = IntervalTree(Test::rightOverlappingIntervals());
-        const auto result = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::rightOverlappingIntervals());
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE(result.empty());
     }
@@ -181,9 +181,9 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Right overlapping and outer intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::rightOverlappingIntervals(), Test::outerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto result = tree.findOuterIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::rightOverlappingIntervals(), Test::outerIntervals());
+        IntervalTree tree(intervals);
+        const auto &result = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(result.empty());
 
@@ -194,8 +194,8 @@ TEST_CASE("Find outer intervals")
 
     SECTION("Outer intervals order")
     {
-        const auto tree = IntervalTree(Test::outerIntervals());
-        const auto intervals = tree.findOuterIntervals(Test::interval());
+        IntervalTree tree(Test::outerIntervals());
+        const auto &intervals = tree.findOuterIntervals(Test::interval());
 
         REQUIRE_FALSE(intervals.empty());
 

@@ -23,8 +23,8 @@ TEST_CASE("Count inner intervals")
 {
     SECTION("Empty tree")
     {
-        const IntervalTree tree;
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree;
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(tree.isEmpty());
         REQUIRE(0 == count);
@@ -33,7 +33,7 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Boundary interval")
     {
-        const auto tree = IntervalTree(Test::boundaryIntervals());
+        IntervalTree tree(Test::boundaryIntervals());
 
         auto count = tree.countInnerIntervals(Test::interval(), true);
         REQUIRE(count == Test::boundaryIntervals().size());
@@ -45,8 +45,8 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Outer intervals")
     {
-        const auto tree = IntervalTree(Test::outerIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree(Test::outerIntervals());
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(0 == count);
     }
@@ -54,9 +54,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Outer and boundary intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::boundaryIntervals().size());
     }
@@ -64,8 +64,8 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Inner intervals")
     {
-        const auto tree = IntervalTree(Test::innerIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree(Test::innerIntervals());
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -73,9 +73,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Inner and boundary intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::innerIntervals(), Test::boundaryIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::innerIntervals(), Test::boundaryIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == intervals.size());
     }
@@ -83,9 +83,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Outer and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::outerIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::outerIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -93,8 +93,8 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Left intervals")
     {
-        const auto tree = IntervalTree(Test::leftIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree(Test::leftIntervals());
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(0 == count);
     }
@@ -102,9 +102,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Left and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::leftIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -112,8 +112,8 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Right intervals")
     {
-        const auto tree = IntervalTree(Test::rightIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree(Test::rightIntervals());
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(0 == count);
     }
@@ -121,9 +121,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Right and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::rightIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -131,8 +131,8 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Left overlapping intervals")
     {
-        const auto tree = IntervalTree(Test::leftOverlappingIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree(Test::leftOverlappingIntervals());
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(0 == count);
     }
@@ -140,9 +140,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Left overlapping and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::leftOverlappingIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::leftOverlappingIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::innerIntervals().size());
     }
@@ -150,8 +150,8 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Right overlapping intervals")
     {
-        const auto tree = IntervalTree(Test::rightOverlappingIntervals());
-        const auto count = tree.countInnerIntervals(Test::interval());
+        IntervalTree tree(Test::rightOverlappingIntervals());
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(0 == count);
     }
@@ -159,9 +159,9 @@ TEST_CASE("Count inner intervals")
 
     SECTION("Right overlapping and inner intervals")
     {
-        const auto intervals = Test::compositeIntervals(Test::rightOverlappingIntervals(), Test::innerIntervals());
-        const auto tree = IntervalTree(intervals);
-        const auto count = tree.countInnerIntervals(Test::interval());
+        const auto &intervals = Test::compositeIntervals(Test::rightOverlappingIntervals(), Test::innerIntervals());
+        IntervalTree tree(intervals);
+        auto count = tree.countInnerIntervals(Test::interval());
 
         REQUIRE(count == Test::innerIntervals().size());
     }

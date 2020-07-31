@@ -45,8 +45,8 @@ int rand(int min, int max)
 
 Interval Random::createInterval()
 {
-  const int low = rand(MIN_VALUE, MAX_VALUE);
-  const int high = rand(low + int(MIN_RANGE), low + int(MAX_RANGE));
+  auto low = rand(MIN_VALUE, MAX_VALUE);
+  auto high = rand(low + int(MIN_RANGE), low + int(MAX_RANGE));
   return {low, high};
 }
 
