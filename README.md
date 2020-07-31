@@ -14,32 +14,34 @@ A red-black self-balancing interval tree C++11 header-only implementation
 #include <iostream>
 #include "intervaltree.hpp"
 
+using namespace Intervals;
+
 int main()
 {
     // Create an interval tree
-    Intervals::IntervalTree<int> intervalTree;
+    IntervalTree<int> tree;
 
     // Insert intervals to the tree
-    intervalTree.insert({20, 30});
-    intervalTree.insert({40, 60});
-    intervalTree.insert({70, 90});
-    intervalTree.insert({60, 70});
-    intervalTree.insert({40, 90});
-    intervalTree.insert({80, 90});
+    tree.insert({20, 30});
+    tree.insert({40, 60});
+    tree.insert({70, 90});
+    tree.insert({60, 70});
+    tree.insert({40, 90});
+    tree.insert({80, 90});
 
     // Wanted interval and point
-    auto wantedInterval = Intervals::Interval<int>(50, 80);
+    Interval<int> wantedInterval(50, 80);
     auto wantedPoint = 50;
 
     // Find intervals
-    const auto &overlappingIntervals = intervalTree.findOverlappingIntervals(wantedInterval);
-    const auto &innerIntervals = intervalTree.findInnerIntervals(wantedInterval);
-    const auto &outerIntervals = intervalTree.findOuterIntervals(wantedInterval);
-    const auto &intervalsContainPoint = intervalTree.findIntervalsContainPoint(wantedPoint);
+    const auto &overlappingIntervals = tree.findOverlappingIntervals(wantedInterval);
+    const auto &innerIntervals = tree.findInnerIntervals(wantedInterval);
+    const auto &outerIntervals = tree.findOuterIntervals(wantedInterval);
+    const auto &intervalsContainPoint = tree.findIntervalsContainPoint(wantedPoint);
 
     // Print all intervals
     std::cout << "All intervals:" << std::endl;
-    for (const auto &interval : intervalTree.intervals()) {
+    for (const auto &interval : tree.intervals()) {
         std::cout << interval << std::endl;
     }
     std::cout << std::endl;
@@ -66,7 +68,8 @@ int main()
     std::cout << std::endl;
 
     // Print intervals contain the point
-    std::cout << "Intervals contain a point value of " << wantedPoint << ":" << std::endl;
+    std::cout << "Intervals contain the point with the value "
+              << wantedPoint << ":" << std::endl;
     for (const auto &interval : intervalsContainPoint) {
         std::cout << interval << std::endl;
     }
