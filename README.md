@@ -95,4 +95,4 @@ cd ./test
 This code is distributed under the [MIT License](LICENSE)
 
 ## Author
-Ivan Pinezhaninov <ivan.pinezhaninov@gmail.com>
+[Ivan Pinezhaninov](mailto:ivan.pinezhaninov@gmail.com)
