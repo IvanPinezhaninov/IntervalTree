@@ -94,5 +94,5 @@ cd ./test
 ## License
 This code is distributed under the [MIT License](LICENSE)
 
-## Contacts
-Ivan Pinezhaninov, ivan.pinezhaninov@gmail.com
+## Author
+Ivan Pinezhaninov <ivan.pinezhaninov@gmail.com>
