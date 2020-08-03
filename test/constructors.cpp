@@ -221,3 +221,12 @@ TEST_CASE("IntervalTree constructor for vector container iterators")
     REQUIRE_FALSE(treeIntervals.empty());
     REQUIRE(std::is_permutation(treeIntervals.cbegin(), treeIntervals.cend(), intervals.cbegin()));
 }
+
+
+TEST_CASE("Interval scalar and non-scalar constructors")
+{
+    Intervals::Interval<int, int>(1, 2, 3);
+    Intervals::Interval<int, std::string>(1, 2, std::string("3"));
+    Intervals::Interval<std::string, int>(std::string("1"), std::string("2"), 3);
+    Intervals::Interval<std::string, std::string>(std::string("1"), std::string("2"), std::string("3"));
+}

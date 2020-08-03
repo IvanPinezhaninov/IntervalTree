@@ -38,10 +38,45 @@ struct Interval
     using value_type = typename std::decay<ValueType>::type;
 
 
-    template <typename I, typename V = ValueType>
+    template <typename I, typename V = ValueType,
+              typename = typename std::enable_if<std::is_scalar<typename std::decay<I>::type>::value>::type,
+              typename = typename std::enable_if<std::is_scalar<typename std::decay<V>::type>::value>::type>
+    Interval(I a, I b, V val = {}) :
+        low(std::min(a, b)),
+        high(std::max(a, b)),
+        value(val)
+    {
+    }
+
+
+    template <typename I, typename V = ValueType,
+              typename = typename std::enable_if<!std::is_scalar<typename std::decay<I>::type>::value>::type,
+              typename = typename std::enable_if<!std::is_scalar<typename std::decay<V>::type>::value>::type>
     Interval(I &&a, I &&b, V &&val = {}) :
         low(std::forward<I>(a < b ? a : b)),
         high(std::forward<I>(b < a ? a : b)),
+        value(std::forward<V>(val))
+    {
+    }
+
+
+    template <typename I, typename V = ValueType,
+              typename = typename std::enable_if<!std::is_scalar<typename std::decay<I>::type>::value>::type,
+              typename = typename std::enable_if<std::is_scalar<typename std::decay<V>::type>::value>::type>
+    Interval(I &&a, I &&b, V val = {}) :
+        low(std::forward<I>(a < b ? a : b)),
+        high(std::forward<I>(b < a ? a : b)),
+        value(val)
+    {
+    }
+
+
+    template <typename I, typename V = ValueType,
+              typename = typename std::enable_if<std::is_scalar<typename std::decay<I>::type>::value>::type,
+              typename = typename std::enable_if<!std::is_scalar<typename std::decay<V>::type>::value>::type>
+    Interval(I a, I b, V &&val = {}) :
+        low(std::min(a, b)),
+        high(std::max(a, b)),
         value(std::forward<V>(val))
     {
     }
