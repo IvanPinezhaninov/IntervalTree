@@ -229,4 +229,6 @@ TEST_CASE("Interval scalar and non-scalar constructors")
     Intervals::Interval<int, std::string>(1, 2, std::string("3"));
     Intervals::Interval<std::string, int>(std::string("1"), std::string("2"), 3);
     Intervals::Interval<std::string, std::string>(std::string("1"), std::string("2"), std::string("3"));
+    Intervals::Interval<int, int>(std::make_tuple(1, 2), 3);
+    Intervals::Interval<int, std::string>(std::make_tuple(1, 2), std::string("3"));
 }

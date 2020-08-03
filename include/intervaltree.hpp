@@ -82,7 +82,16 @@ struct Interval
     }
 
 
-    template <typename V = ValueType>
+    template <typename V = ValueType,
+              typename = typename std::enable_if<std::is_scalar<typename std::decay<V>::type>::value>::type>
+    explicit Interval(const std::tuple<IntervalType, IntervalType> &interval, V val = {}) :
+        Interval(std::get<0>(interval), std::get<1>(interval), val)
+    {
+    }
+
+
+    template <typename V = ValueType,
+              typename = typename std::enable_if<!std::is_scalar<typename std::decay<V>::type>::value>::type>
     explicit Interval(const std::tuple<IntervalType, IntervalType> &interval, V &&val = {}) :
         Interval(std::get<0>(interval), std::get<1>(interval), std::forward<V>(val))
     {
