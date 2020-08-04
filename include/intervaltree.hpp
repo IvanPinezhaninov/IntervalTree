@@ -386,7 +386,7 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeOverlappingIntervals(m_root, interval, boundary, Appender{out});
         }
 
         out.shrink_to_fit();
@@ -409,7 +409,7 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeInnerIntervals(m_root, interval, boundary, Appender{out});
         }
 
         out.shrink_to_fit();
@@ -432,7 +432,7 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeOuterIntervals(m_root, interval, boundary, Appender{out});
         }
 
         out.shrink_to_fit();
@@ -455,7 +455,7 @@ public:
         }
 
         if (m_root != m_nill) {
-            subtreeIntervalsContainPoint(m_root, point, boundary, [&out] (const Interval &in) -> void { out.push_back(in); });
+            subtreeIntervalsContainPoint(m_root, point, boundary, Appender{out});
         }
 
         out.shrink_to_fit();
@@ -476,7 +476,7 @@ public:
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeOverlappingIntervals(m_root, interval, boundary, [&count] (const Interval &) -> void { ++count; });
+            subtreeOverlappingIntervals(m_root, interval, boundary, Counter{count});
         }
 
         return count;
@@ -488,7 +488,7 @@ public:
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeInnerIntervals(m_root, interval, boundary, [&count] (const Interval &) -> void { ++count; });
+            subtreeInnerIntervals(m_root, interval, boundary, Counter{count});
         }
 
         return count;
@@ -500,7 +500,7 @@ public:
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeOuterIntervals(m_root, interval, boundary, [&count] (const Interval &) -> void { ++count; });
+            subtreeOuterIntervals(m_root, interval, boundary, Counter{count});
         }
 
         return count;
@@ -512,7 +512,7 @@ public:
         size_type count = 0;
 
         if (m_root != m_nill) {
-            subtreeIntervalsContainPoint(m_root, point, boundary, [&count] (const Interval &) -> void { ++count; });
+            subtreeIntervalsContainPoint(m_root, point, boundary, Counter{count});
         }
 
         return count;
@@ -554,13 +554,36 @@ private:
     };
 
 
+    struct Appender final
+    {
+        template <typename Interval>
+        void operator()(Interval &&interval)
+        {
+            intervals.emplace_back(std::forward<Interval>(interval));
+        }
+
+        Intervals &intervals;
+    };
+
+
+    struct Counter final
+    {
+        template <typename Interval>
+        void operator()(Interval &&)
+        {
+            ++count;
+        }
+
+        size_type &count;
+    };
+
+
     struct HighComparator final
     {
-      public:
-        template<typename T>
+        template <typename T>
         bool operator()(const T &lhs, const T &rhs) const
         {
-          return (lhs.high < rhs.high);
+            return (lhs.high < rhs.high);
         }
     };
 
