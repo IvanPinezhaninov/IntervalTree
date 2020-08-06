@@ -806,7 +806,7 @@ private:
 
         if (node->left != m_nill
                 && (boundary ? !(node->left->highest < interval.low) : interval.low < node->left->highest)) {
-            subtreeOverlappingIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
+            subtreeOverlappingIntervals(node->left, interval, boundary, callback);
         }
 
         if (boundary ? !(interval.high < node->intervals.front().low) : node->intervals.front().low < interval.high) {
@@ -833,7 +833,7 @@ private:
         }
 
         if (boundary ? !(node->intervals.front().low < interval.low) : interval.low < node->intervals.front().low) {
-            subtreeInnerIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
+            subtreeInnerIntervals(node->left, interval, boundary, callback);
             for (auto it = node->intervals.begin(); it != node->intervals.end(); ++it) {
                 if (boundary ? !(interval.high < it->high) : it->high < interval.high) {
                     callback(*it);
@@ -861,7 +861,7 @@ private:
 
         if (node->left != m_nill
                 && (boundary ? !(node->left->highest < interval.high) : interval.high < node->left->highest)) {
-            subtreeOuterIntervals(node->left, interval, boundary, std::forward<Callback>(callback));
+            subtreeOuterIntervals(node->left, interval, boundary, callback);
         }
 
         if (boundary ? !(interval.low < node->intervals.front().low) : node->intervals.front().low < interval.low) {
@@ -889,7 +889,7 @@ private:
 
         if (node->left != m_nill
                 && (boundary ? !(node->left->highest < point) : point < node->left->highest)) {
-            subtreeIntervalsContainPoint(node->left, point, boundary, std::forward<Callback>(callback));
+            subtreeIntervalsContainPoint(node->left, point, boundary, callback);
         }
 
         if (boundary ? !(point < node->intervals.front().low) : node->intervals.front().low < point) {
